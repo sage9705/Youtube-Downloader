@@ -1,4 +1,4 @@
-﻿namespace YoutubePlaylistDownloader;
+namespace YoutubePlaylistDownloader;
 
 public partial class MainPage : UserControl
 {
@@ -6,6 +6,8 @@ public partial class MainPage : UserControl
     private FullPlaylist list = null;
     private IEnumerable<IVideo> VideoList;
     private Channel channel = null;
+    private ObservableCollection<SelectableVideo> selectableVideos = [];
+    private bool isUpdatingSelectAll = false;
     private readonly Dictionary<string, VideoQuality> Resolutions = new()
     {
         { "144p", YoutubeHelpers.Low144 },
@@ -59,6 +61,7 @@ public partial class MainPage : UserControl
                     list = new FullPlaylist(basePlaylist, await client.Playlists.GetVideosAsync(basePlaylist.Id).CollectAsync().ConfigureAwait(false));
                     VideoList = new List<PlaylistVideo>();
                     await UpdatePlaylistInfo(Visibility.Visible, list.BasePlaylist.Title, list.BasePlaylist.Author?.ChannelTitle ?? "", "", list.Videos.Count().ToString(), $"https://img.youtube.com/vi/{list?.Videos?.FirstOrDefault()?.Id}/maxresdefault.jpg", true, true);
+                    await PopulateVideoGrid(list.Videos);
                 }).ConfigureAwait(false);
             }
             else if (YoutubeHelpers.TryParseChannelId(PlaylistLinkTextBox.Text, out var channelId))
@@ -69,6 +72,7 @@ public partial class MainPage : UserControl
                     list = new FullPlaylist(null, null, channel.Title);
                     VideoList = await client.Channels.GetUploadsAsync(channel.Id).CollectAsync().ConfigureAwait(false);
                     await UpdatePlaylistInfo(Visibility.Visible, channel.Title, totalVideos: VideoList.Count().ToString(), imageUrl: channel.Thumbnails.FirstOrDefault()?.Url, downloadEnabled: true, showIndexes: true);
+                    await PopulateVideoGrid(VideoList);
                 }).ConfigureAwait(false);
             }
             else if (YoutubeHelpers.TryParseUsername(PlaylistLinkTextBox.Text, out var username))
@@ -79,6 +83,7 @@ public partial class MainPage : UserControl
                     list = new FullPlaylist(null, null, channel.Title);
                     VideoList = await client.Channels.GetUploadsAsync(channel.Id).CollectAsync().ConfigureAwait(false);
                     await UpdatePlaylistInfo(Visibility.Visible, channel.Title, totalVideos: VideoList.Count().ToString(), imageUrl: channel.Thumbnails.FirstOrDefault()?.Url, downloadEnabled: true, showIndexes: true);
+                    await PopulateVideoGrid(VideoList);
                 }).ConfigureAwait(false);
             }
             else if (YoutubeHelpers.TryParseHandle(PlaylistLinkTextBox.Text, out var handle))
@@ -89,6 +94,7 @@ public partial class MainPage : UserControl
                     list = new FullPlaylist(null, null, channel.Title);
                     VideoList = await client.Channels.GetUploadsAsync(channel.Id).CollectAsync().ConfigureAwait(false);
                     await UpdatePlaylistInfo(Visibility.Visible, channel.Title, totalVideos: VideoList.Count().ToString(), imageUrl: channel.Thumbnails.FirstOrDefault()?.Url, downloadEnabled: true, showIndexes: true);
+                    await PopulateVideoGrid(VideoList);
                 }).ConfigureAwait(false);
             }
             else if (YoutubeHelpers.TryParseVideoId(PlaylistLinkTextBox.Text, out var videoId))
@@ -99,12 +105,13 @@ public partial class MainPage : UserControl
                     VideoList = new List<Video> { video };
                     list = new FullPlaylist(null, null);
                     await UpdatePlaylistInfo(Visibility.Visible, video.Title, video.Author.ChannelTitle, video.Engagement.ViewCount.ToString(), string.Empty, $"https://img.youtube.com/vi/{video.Id}/maxresdefault.jpg", true, false);
-
+                    await HideVideoGrid();
                 }).ConfigureAwait(false);
             }
             else
             {
                 await UpdatePlaylistInfo().ConfigureAwait(false);
+                await HideVideoGrid();
             }
         }
 
@@ -113,6 +120,78 @@ public partial class MainPage : UserControl
             await GlobalConsts.Log(ex.ToString(), "MainPage TextBox_TextChanged");
             await GlobalConsts.ShowMessage((string)FindResource("Error"), ex.Message);
         }
+    }
+
+    private async Task PopulateVideoGrid(IEnumerable<IVideo> videos)
+    {
+        var items = videos.Select((v, i) => new SelectableVideo(v, i + 1)).ToList();
+        await Dispatcher.InvokeAsync(() =>
+        {
+            selectableVideos = new ObservableCollection<SelectableVideo>(items);
+            VideosDataGrid.ItemsSource = selectableVideos;
+            VideosDataGrid.Visibility = Visibility.Visible;
+            SelectionCountTextBlock.Visibility = Visibility.Visible;
+            isUpdatingSelectAll = true;
+            SelectAllCheckBox.IsChecked = true;
+            isUpdatingSelectAll = false;
+            UpdateSelectionCount();
+        });
+    }
+
+    private async Task HideVideoGrid()
+    {
+        await Dispatcher.InvokeAsync(() =>
+        {
+            VideosDataGrid.Visibility = Visibility.Collapsed;
+            SelectionCountTextBlock.Visibility = Visibility.Collapsed;
+            VideosDataGrid.ItemsSource = null;
+            selectableVideos.Clear();
+        });
+    }
+
+    private void UpdateSelectionCount()
+    {
+        if (selectableVideos == null || SelectionCountTextBlock == null) return;
+
+        var selected = selectableVideos.Count(v => v.IsSelected);
+        var total = selectableVideos.Count;
+        SelectionCountTextBlock.Text = $"{selected} / {total} {FindResource("Selected")}";
+
+        var hasSelection = selected > 0;
+        if (DownloadButton != null) DownloadButton.IsEnabled = hasSelection;
+        if (DownloadInBackgroundButton != null) DownloadInBackgroundButton.IsEnabled = hasSelection;
+    }
+
+    private void SelectAllCheckBox_Changed(object sender, RoutedEventArgs e)
+    {
+        if (isUpdatingSelectAll || selectableVideos == null || selectableVideos.Count == 0) return;
+
+        var isChecked = SelectAllCheckBox.IsChecked == true;
+        foreach (var video in selectableVideos)
+            video.IsSelected = isChecked;
+
+        UpdateSelectionCount();
+    }
+
+    private void VideoCheckBox_Changed(object sender, RoutedEventArgs e)
+    {
+        if (isUpdatingSelectAll) return;
+
+        isUpdatingSelectAll = true;
+        var allSelected = selectableVideos.All(v => v.IsSelected);
+        var noneSelected = selectableVideos.All(v => !v.IsSelected);
+        SelectAllCheckBox.IsChecked = allSelected ? true : noneSelected ? false : null;
+        isUpdatingSelectAll = false;
+
+        UpdateSelectionCount();
+    }
+
+    private IEnumerable<IVideo> GetSelectedVideos()
+    {
+        if (selectableVideos.Count == 0)
+            return VideoList;
+
+        return selectableVideos.Where(v => v.IsSelected).Select(v => v.Video);
     }
 
     private void DownloadButton_Click(object sender, RoutedEventArgs e)
@@ -125,7 +204,14 @@ public partial class MainPage : UserControl
                 return;
             }
 
-            GlobalConsts.LoadPage(new DownloadPage(list, GlobalConsts.DownloadSettings.Clone(), videos: VideoList));
+            var selectedVideos = GetSelectedVideos().ToList();
+            if (!selectedVideos.Any())
+            {
+                GlobalConsts.ShowMessage((string)FindResource("Error"), (string)FindResource("NoVideosSelected")).ConfigureAwait(false);
+                return;
+            }
+
+            GlobalConsts.LoadPage(new DownloadPage(list, GlobalConsts.DownloadSettings.Clone(), videos: selectedVideos));
             VideoList = new List<IVideo>();
             PlaylistLinkTextBox.Text = string.Empty;
         }
@@ -174,7 +260,14 @@ public partial class MainPage : UserControl
                 return;
             }
 
-            _ = new DownloadPage(list, GlobalConsts.DownloadSettings.Clone(), silent: true, videos: VideoList);
+            var selectedVideos = GetSelectedVideos().ToList();
+            if (!selectedVideos.Any())
+            {
+                GlobalConsts.ShowMessage((string)FindResource("Error"), (string)FindResource("NoVideosSelected")).ConfigureAwait(false);
+                return;
+            }
+
+            _ = new DownloadPage(list, GlobalConsts.DownloadSettings.Clone(), silent: true, videos: selectedVideos);
             VideoList = new List<IVideo>();
             PlaylistLinkTextBox.Text = string.Empty;
         }

@@ -113,7 +113,7 @@ public partial class DownloadPage : UserControl, IDisposable, IDownload
         downloadSettings = settings;
         downloadSpeeds = new FixedQueue<double>(50);
 
-        Videos = playlist == null || playlist.BasePlaylist == null ? videos : playlist.Videos;
+        Videos = videos != null && videos.Any() ? videos : playlist?.Videos;
 
         if (settings.FilterVideosByLength)
         {
