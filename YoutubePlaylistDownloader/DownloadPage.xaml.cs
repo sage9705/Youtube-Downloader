@@ -1,4 +1,4 @@
-﻿namespace YoutubePlaylistDownloader;
+namespace YoutubePlaylistDownloader;
 
 /// <summary>
 /// Interaction logic for DownloadPage.xaml
@@ -648,13 +648,15 @@ public partial class DownloadPage : UserControl, IDisposable, IDownload
                 IVideoStreamInfo bestQuality = null;
                 IStreamInfo bestAudio = null;
 
-                var videoList = streamInfoSet.GetVideoOnlyStreams().OrderByDescending(x => x.VideoQuality == Quality);
+                var videoList = streamInfoSet.GetVideoOnlyStreams()
+                    .OrderBy(x => x.VideoQuality.MaxHeight > Quality.MaxHeight ? 1 : 0)
+                    .ThenBy(x => Math.Abs(x.VideoQuality.MaxHeight - Quality.MaxHeight));
 
-                videoList = PreferHighestFPS
-                    ? videoList.ThenByDescending(x => x.VideoQuality.Framerate).ThenBy(x => Math.Abs(x.VideoQuality.MaxHeight - Quality.MaxHeight))
-                    : videoList.ThenBy(x => Math.Abs(x.VideoQuality.MaxHeight - Quality.MaxHeight));
+                var orderedVideoList = PreferHighestFPS
+                    ? videoList.ThenByDescending(x => x.VideoQuality.Framerate).ThenByDescending(x => x.Bitrate)
+                    : videoList.ThenBy(x => x.VideoQuality.Framerate).ThenByDescending(x => x.Bitrate);
 
-                bestQuality = videoList.FirstOrDefault();
+                bestQuality = orderedVideoList.FirstOrDefault();
                 if (downloadSettings.VideoLanguage == "default")
                 {
                     var defaultLangaugeVideos = streamInfoSet.GetAudioOnlyStreams().Where(x => x.IsAudioLanguageDefault.HasValue && x.IsAudioLanguageDefault.Value);

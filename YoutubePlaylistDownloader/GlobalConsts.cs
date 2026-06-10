@@ -1,4 +1,4 @@
-﻿namespace YoutubePlaylistDownloader;
+namespace YoutubePlaylistDownloader;
 
 static class GlobalConsts
 {
@@ -60,7 +60,7 @@ static class GlobalConsts
         };
         Downloads = [];
         CurrentDir = new FileInfo(Assembly.GetEntryAssembly().Location).Directory.ToString();
-        FFmpegFilePath = $"{CurrentDir}\\ffmpeg.exe";
+        FFmpegFilePath = FindFFmpegPath();
         var appDataPath = string.Concat(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "\\Youtube Playlist Downloader\\");
         ConfigFilePath = string.Concat(appDataPath, "Settings.json");
         ErrorFilePath = string.Concat(appDataPath, "Errors.txt");
@@ -81,6 +81,42 @@ static class GlobalConsts
         UpdateSetupLocation = string.Empty;
         SubscriptionsUpdateDelay = TimeSpan.FromMinutes(1);
         Downloads.CollectionChanged += Downloads_CollectionChanged;
+    }
+
+    private static string FindFFmpegPath()
+    {
+        // First, check next to the application executable (e.g. installed via setup)
+        var localPath = $"{CurrentDir}\\ffmpeg.exe";
+        if (File.Exists(localPath))
+            return localPath;
+
+        // Fall back to searching the system PATH
+        var pathDirs = Environment.GetEnvironmentVariable("PATH")?.Split(';') ?? [];
+        foreach (var dir in pathDirs)
+        {
+            try
+            {
+                var candidate = Path.Combine(dir.Trim(), "ffmpeg.exe");
+                if (File.Exists(candidate) && new FileInfo(candidate).Length > 1_000_000)
+                    return candidate;
+            }
+            catch { }
+        }
+
+        // If no large binary found, accept any ffmpeg on PATH (even a shim)
+        foreach (var dir in pathDirs)
+        {
+            try
+            {
+                var candidate = Path.Combine(dir.Trim(), "ffmpeg.exe");
+                if (File.Exists(candidate))
+                    return candidate;
+            }
+            catch { }
+        }
+
+        // Default to local path so the existing "file not found" error still works
+        return localPath;
     }
 
     //The const methods are used mainly for saving/loading consts, and handling page\menu management.
