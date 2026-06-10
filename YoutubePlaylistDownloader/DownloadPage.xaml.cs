@@ -295,17 +295,18 @@ public partial class DownloadPage : UserControl, IDisposable, IDownload
                     downloadSpeeds.Clear();
 
                     var streamInfoSet = await client.Videos.Streams.GetManifestAsync(video.Id, token);
-                    IStreamInfo bestQuality;
+                    IStreamInfo bestAudio;
+                    IVideoStreamInfo bestVideo = null;
                     if (downloadSettings.VideoLanguage == "default")
                     {
                         var defaultLangaugeVideos = streamInfoSet.GetAudioOnlyStreams().Where(x => x.IsAudioLanguageDefault.HasValue && x.IsAudioLanguageDefault.Value);
                         if (defaultLangaugeVideos.Any())
                         {
-                            bestQuality = defaultLangaugeVideos.GetWithHighestBitrate();
+                            bestAudio = defaultLangaugeVideos.GetWithHighestBitrate();
                         }
                         else
                         {
-                            bestQuality = streamInfoSet.GetAudioOnlyStreams().GetWithHighestBitrate();
+                            bestAudio = streamInfoSet.GetAudioOnlyStreams().GetWithHighestBitrate();
                         }
                     }
                     else
@@ -313,27 +314,42 @@ public partial class DownloadPage : UserControl, IDisposable, IDownload
                         var videoesInRequestedLanguage = streamInfoSet.GetAudioOnlyStreams().Where(x => x.AudioLanguage.HasValue && x.AudioLanguage.Value.Code.Contains(downloadSettings.VideoLanguage));
                         if (videoesInRequestedLanguage.Any())
                         {
-                            bestQuality = videoesInRequestedLanguage.GetWithHighestBitrate();
+                            bestAudio = videoesInRequestedLanguage.GetWithHighestBitrate();
                         }
                         else
                         {
                             var defaultAudioStreams = streamInfoSet.GetAudioOnlyStreams().Where(x => x.IsAudioLanguageDefault.HasValue && x.IsAudioLanguageDefault.Value);
                             if (defaultAudioStreams.Any())
                             {
-                                bestQuality =defaultAudioStreams.GetWithHighestBitrate();
+                                bestAudio = defaultAudioStreams.GetWithHighestBitrate();
                             }
                             else
                             {
-                                bestQuality = streamInfoSet.GetAudioOnlyStreams().GetWithHighestBitrate();
+                                bestAudio = streamInfoSet.GetAudioOnlyStreams().GetWithHighestBitrate();
                             }
                         }
                     }
+
+                    if (!AudioOnly)
+                    {
+                        var videoList = streamInfoSet.GetVideoOnlyStreams()
+                            .OrderBy(x => Math.Abs(x.VideoQuality.MaxHeight - Quality.MaxHeight))
+                            .ThenByDescending(x => x.VideoQuality.MaxHeight);
+
+                        var orderedVideoList = PreferHighestFPS
+                            ? videoList.ThenByDescending(x => x.VideoQuality.Framerate).ThenByDescending(x => x.Bitrate)
+                            : videoList.ThenBy(x => x.VideoQuality.Framerate).ThenByDescending(x => x.Bitrate);
+
+                        bestVideo = orderedVideoList.FirstOrDefault();
+                    }
+
                     var cleanFileNameWithID = GlobalConsts.CleanFileName(video.Title + video.Id);
                     var cleanFileName = GlobalConsts.CleanFileName(downloadSettings.GetFilenameByPattern(video, i, title, Playlist));
                     var fileLoc = $"{GlobalConsts.TempFolderPath}{cleanFileNameWithID}";
+                    var audioLoc = $"{GlobalConsts.TempFolderPath}{cleanFileNameWithID}-audio.{bestAudio.Container.Name}";
 
                     if (AudioOnly)
-                        FileType = bestQuality.Container.Name;
+                        FileType = bestAudio.Container.Name;
 
                     var outputFileLoc = $"{GlobalConsts.TempFolderPath}{cleanFileNameWithID}.{FileType}";
                     var copyFileLoc = $"{SavePath}\\{cleanFileName}.{FileType}";
@@ -356,6 +372,8 @@ public partial class DownloadPage : UserControl, IDisposable, IDownload
                     CurrentProgressPercent = 0;
                     CurrentDownloadSpeed = "0 MiB/s";
 
+                    var primaryStream = AudioOnly ? bestAudio : (IStreamInfo)bestVideo;
+
                     using (var stream = new ProgressStream(File.Create(fileLoc)))
                     {
                         Stopwatch sw = new();
@@ -367,7 +385,7 @@ public partial class DownloadPage : UserControl, IDisposable, IDownload
                         {
                             try
                             {
-                                var percent = Convert.ToInt32(args.StreamLength * 100 / bestQuality.Size.Bytes);
+                                var percent = Convert.ToInt32(args.StreamLength * 100 / primaryStream.Size.Bytes);
                                 CurrentProgressPercent = percent;
                                 double speedInMB = 0;
                                 var delta = sw.Elapsed - ts;
@@ -416,7 +434,20 @@ public partial class DownloadPage : UserControl, IDisposable, IDownload
                             }
 
                         };
-                        await client.Videos.Streams.CopyToAsync(bestQuality, stream, cancellationToken: token);
+
+                        if (AudioOnly)
+                        {
+                            await client.Videos.Streams.CopyToAsync(bestAudio, stream, cancellationToken: token);
+                        }
+                        else
+                        {
+                            var videoTask = client.Videos.Streams.CopyToAsync(bestVideo, stream, cancellationToken: token);
+                            using (var audioStream = File.Create(audioLoc))
+                            {
+                                var audioTask = client.Videos.Streams.CopyToAsync(bestAudio, audioStream, cancellationToken: token);
+                                await ExtensionMethods.WhenAll(videoTask, audioTask);
+                            }
+                        }
                         sw.Stop();
                     }
                     if (!AudioOnly)
@@ -427,7 +458,7 @@ public partial class DownloadPage : UserControl, IDisposable, IDownload
                             StartInfo = new ProcessStartInfo()
                             {
                                 FileName = GlobalConsts.FFmpegFilePath,
-                                Arguments = $"-i \"{fileLoc}\" -y {Bitrate} \"{outputFileLoc}\"",
+                                Arguments = $"-i \"{fileLoc}\" -i \"{audioLoc}\" -y -c copy {Bitrate} \"{outputFileLoc}\"",
                                 CreateNoWindow = true,
                                 UseShellExecute = false
                             }
@@ -465,6 +496,8 @@ public partial class DownloadPage : UserControl, IDisposable, IDownload
                                 }
                                 File.Copy(outputFileLoc, copyFileLoc, true);
                                 File.Delete(outputFileLoc);
+                                File.Delete(audioLoc);
+                                File.Delete(fileLoc);
 
                             }
                             catch (Exception ex)
@@ -649,8 +682,8 @@ public partial class DownloadPage : UserControl, IDisposable, IDownload
                 IStreamInfo bestAudio = null;
 
                 var videoList = streamInfoSet.GetVideoOnlyStreams()
-                    .OrderBy(x => x.VideoQuality.MaxHeight > Quality.MaxHeight ? 1 : 0)
-                    .ThenBy(x => Math.Abs(x.VideoQuality.MaxHeight - Quality.MaxHeight));
+                    .OrderBy(x => Math.Abs(x.VideoQuality.MaxHeight - Quality.MaxHeight))
+                    .ThenByDescending(x => x.VideoQuality.MaxHeight);
 
                 var orderedVideoList = PreferHighestFPS
                     ? videoList.ThenByDescending(x => x.VideoQuality.Framerate).ThenByDescending(x => x.Bitrate)
