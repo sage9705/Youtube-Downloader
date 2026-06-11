@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="YoutubePlaylistDownloader.Settings"
+<UserControl x:Class="YoutubePlaylistDownloader.Settings"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:Controls="http://metro.mahapps.com/winfx/xaml/controls"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -19,10 +19,11 @@
     </UserControl.Triggers>
 
     <StackPanel>
-        <Controls:MetroAnimatedTabControl HorizontalAlignment="Center">
+        <Controls:MetroAnimatedTabControl HorizontalAlignment="Stretch">
             <Controls:MetroTabItem Header="{DynamicResource Settings}">
-                <StackPanel>
-                    <Grid Margin="5,0,0,0">
+                <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+                    <Border Style="{StaticResource SectionCard}" Margin="20,10">
+                        <Grid MinWidth="500">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto" />
                             <ColumnDefinition />
@@ -40,10 +41,10 @@
                         </Grid.RowDefinitions>
 
                         <!--Col 0-->
-                        <CheckBox Grid.Row="0" Margin="5" Grid.Column="0"  Grid.ColumnSpan="2" x:Name="NightModeCheckBox" Content="{DynamicResource DarkTheme}"/>
+                        <CheckBox Grid.Row="0" Margin="5" Grid.Column="0"  Grid.ColumnSpan="3" x:Name="NightModeCheckBox" Content="{DynamicResource DarkTheme}"/>
                         <CheckBox Grid.Row="1" Content="{DynamicResource AutomaticallyCheckForUpdates}" Margin="5" Grid.Column="0" Grid.ColumnSpan="5" x:Name="CheckForUpdatesCheckBox" Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked" />
                         <CheckBox Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="4" Margin="5" Content="{DynamicResource SaveDownloadOptions}" x:Name="SaveDownloadOptionsCheckBox" Checked="SaveDownloadOptionsCheckBox_Checked" Unchecked="SaveDownloadOptionsCheckBox_Unchecked" />
-                        <CheckBox Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Margin="5" Content="{DynamicResource LimitConverstions}" x:Name="LimitConversionsCheckBox" Checked="LimitConversionsCheckBox_Checked" Unchecked="LimitConversionsCheckBox_Unchecked" />
+                        <CheckBox Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="3" Margin="5" Content="{DynamicResource LimitConverstions}" x:Name="LimitConversionsCheckBox" Checked="LimitConversionsCheckBox_Checked" Unchecked="LimitConversionsCheckBox_Unchecked" />
                         <CheckBox Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="4" Margin="5" Content="{DynamicResource ConfirmExit}" x:Name="ConfirmOnExitCheckBox" Checked="ConfirmOnExitCheckBox_Checked" Unchecked="ConfirmOnExitCheckBox_Unchecked"/>
                         <Label    Grid.Row="5" Content="{DynamicResource Theme}" Margin="5" Grid.Column="0"  />
                         <Label    Grid.Row="6" Content="{DynamicResource Language}" Margin="5"  Grid.Column="0" />
@@ -59,12 +60,13 @@
                         <!--Col 2-->
 
 
-                    </Grid>
-                </StackPanel>
+                        </Grid>
+                    </Border>
+                </ScrollViewer>
 
             </Controls:MetroTabItem>
         </Controls:MetroAnimatedTabControl>
-        <Controls:Tile Click="Exit_Click" HorizontalAlignment="Center" Title="{DynamicResource SaveAndBackToDownload}" Margin="5" Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" MinWidth="200" Width="Auto" HorizontalTitleAlignment="Center" Controls:ControlsHelper.MouseOverBorderBrush="{DynamicResource BlackBrush}" Style="{StaticResource LargeTileStyle}">
+        <Controls:Tile Click="Exit_Click" HorizontalAlignment="Center" Title="{DynamicResource SaveAndBackToDownload}" Margin="5" MinWidth="280" Width="Auto" HorizontalTitleAlignment="Center" Controls:ControlsHelper.MouseOverBorderBrush="{DynamicResource BlackBrush}" Style="{StaticResource LargeTileStyle}">
             <iconPacks:PackIconModern Width="40" Height="40" Kind="ArrowLeft" />
         </Controls:Tile>
     </StackPanel>

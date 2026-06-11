@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="YoutubePlaylistDownloader.Help"
+<UserControl x:Class="YoutubePlaylistDownloader.Help"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:Controls="http://metro.mahapps.com/winfx/xaml/controls"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -21,7 +21,7 @@
     <StackPanel>
         <Controls:MetroAnimatedTabControl HorizontalAlignment="Center">
             <Controls:MetroTabItem Header="{DynamicResource ContactTheDeveloper}">
-                <RichTextBox MaxWidth="1200" Width="600" Margin="5,0,0,0" BorderThickness="0" Cursor="Arrow" IsReadOnly="True" IsReadOnlyCaretVisible="False" Height="Auto" >
+                <RichTextBox MaxWidth="1200" Width="800" Margin="5,0,0,0" BorderThickness="0" Cursor="Arrow" IsReadOnly="True" IsReadOnlyCaretVisible="False" Height="Auto" >
                     <FlowDocument>
                         <Paragraph>
                             <Run x:Name="ContactTheDeveloperRun" FontSize="14" Text="{DynamicResource ContactTheDeveloperHelp}" />
@@ -30,7 +30,7 @@
                 </RichTextBox>
             </Controls:MetroTabItem>
             <Controls:MetroTabItem Header="{DynamicResource FileConversion}">
-                <RichTextBox MaxWidth="1200" Width="600" Margin="5,0,0,0" BorderThickness="0" Cursor="Arrow" IsReadOnly="True" IsReadOnlyCaretVisible="False" Height="Auto" >
+                <RichTextBox MaxWidth="1200" Width="800" Margin="5,0,0,0" BorderThickness="0" Cursor="Arrow" IsReadOnly="True" IsReadOnlyCaretVisible="False" Height="Auto" >
                     <FlowDocument>
                         <Paragraph>
                             <Run FontSize="14" Text="{DynamicResource ConversionsLimitingExplanation}" />
@@ -39,7 +39,7 @@
                 </RichTextBox>
             </Controls:MetroTabItem>
             <Controls:MetroTabItem Header="{DynamicResource FileNamePatternTitle}">
-                <RichTextBox MaxWidth="1200" Width="600" Margin="5,0,0,0" BorderThickness="0" Cursor="Arrow" IsReadOnly="True" IsReadOnlyCaretVisible="False" Height="Auto" >
+                <RichTextBox MaxWidth="1200" Width="800" Margin="5,0,0,0" BorderThickness="0" Cursor="Arrow" IsReadOnly="True" IsReadOnlyCaretVisible="False" Height="Auto" >
                     <FlowDocument>
                         <Paragraph>
                             <Run FontSize="14" Text="{DynamicResource FileNamePattenExplanation}" />

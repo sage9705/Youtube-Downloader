@@ -1,4 +1,4 @@
-﻿namespace YoutubePlaylistDownloader;
+namespace YoutubePlaylistDownloader;
 
 /// <summary>
 /// Interaction logic for Skeleton.xaml
@@ -185,13 +185,29 @@ public partial class Skeleton : MetroWindow
             DefaultFlyout.IsOpen = false;
     }
 
+    private TaskCompletionSource<MessageDialogResult> _modalTcs;
+
     public async Task<MessageDialogResult> ShowYesNoDialog(string title, string message)
     {
-        return await this.ShowMessageAsync(title, message, MessageDialogStyle.AffirmativeAndNegative, new MetroDialogSettings()
-        {
-            AffirmativeButtonText = (string)FindResource("Yes"),
-            NegativeButtonText = (string)FindResource("No")
-        });
+        ModalTitle.Text = title;
+        ModalMessage.Text = message;
+        
+        _modalTcs = new TaskCompletionSource<MessageDialogResult>();
+        ModalOverlay.Visibility = Visibility.Visible;
+        
+        return await _modalTcs.Task;
+    }
+
+    private void ModalYes_Click(object sender, RoutedEventArgs e)
+    {
+        ModalOverlay.Visibility = Visibility.Collapsed;
+        _modalTcs?.TrySetResult(MessageDialogResult.Affirmative);
+    }
+
+    private void ModalNo_Click(object sender, RoutedEventArgs e)
+    {
+        ModalOverlay.Visibility = Visibility.Collapsed;
+        _modalTcs?.TrySetResult(MessageDialogResult.Negative);
     }
 
     private void SetWindow()
@@ -203,6 +219,16 @@ public partial class Skeleton : MetroWindow
         ResizeMode = ResizeMode.CanResizeWithGrip;
         Closing += MainWindow_Closing;
 
+        // Modern dialog defaults for all dialogs on this window
+        MetroDialogOptions = new MetroDialogSettings
+        {
+            ColorScheme = MetroDialogColorScheme.Theme,
+            AnimateShow = true,
+            AnimateHide = true,
+            DialogTitleFontSize = 24,
+            DialogMessageFontSize = 16,
+            DialogButtonFontSize = 15
+        };
     }
 
     private async void MainWindow_Closing(object sender, CancelEventArgs e)

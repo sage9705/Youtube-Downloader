@@ -1,4 +1,4 @@
-﻿namespace YoutubePlaylistDownloader.Objects;
+namespace YoutubePlaylistDownloader.Objects;
 
 class QueuedDownload(IDownload downloadItem) : IDisposable
 {
@@ -44,20 +44,24 @@ class QueuedDownload(IDownload downloadItem) : IDisposable
 
         border = new Border
         {
-            Margin = margin,
+            Margin = new Thickness(5, 5, 5, 8),
+            Padding = new Thickness(10),
             BorderThickness = new Thickness(1),
-            BorderBrush = Brushes.White,
+            BorderBrush = (System.Windows.Media.Brush)Application.Current.FindResource("MahApps.Brushes.Control.Border"),
+            Background = (System.Windows.Media.Brush)Application.Current.FindResource("MahApps.Brushes.Control.Background"),
+            CornerRadius = new CornerRadius(8),
             Child = DisplayGrid
         };
 
         var stopButton = new Tile
         {
-            Width = 50,
-            Height = 50,
+            Width = 36,
+            Height = 36,
             Margin = margin,
-            Content = new PackIconModern { Width = 40, Height = 40, Kind = PackIconModernKind.Close },
+            Content = new PackIconModern { Width = 18, Height = 18, Kind = PackIconModernKind.Close },
             VerticalAlignment = VerticalAlignment.Center,
-            HorizontalAlignment = HorizontalAlignment.Center
+            HorizontalAlignment = HorizontalAlignment.Center,
+            Style = (Style)Application.Current.FindResource("RoundIconButton")
         };
 
         stopButton.Click += async (s, e) =>
@@ -180,23 +184,28 @@ class QueuedDownload(IDownload downloadItem) : IDisposable
                 Mode = BindingMode.OneWay
             };
 
-        var progressBarGrid = new Grid { Margin = margin };
+        var progressBarPanel = new StackPanel { Margin = margin, VerticalAlignment = VerticalAlignment.Center };
 
         var
             progressBar = new MetroProgressBar
             {
                 Width = 550,
-                Height = 30,
-                VerticalAlignment = VerticalAlignment.Center
+                Height = 10,
+                VerticalAlignment = VerticalAlignment.Center,
+                Margin = new Thickness(0, 4, 0, 0)
             };
 
-        progressBarGrid.Children.Add(progressBar);
-        progressBarGrid.Children.Add(downloadPercent);
+        downloadPercent.HorizontalAlignment = HorizontalAlignment.Right;
+        downloadPercent.FontWeight = FontWeights.SemiBold;
+        downloadPercent.FontSize = 13;
+
+        progressBarPanel.Children.Add(downloadPercent);
+        progressBarPanel.Children.Add(progressBar);
 
         //Col 3:
-        Grid.SetRow(progressBarGrid, 0);
-        Grid.SetRowSpan(progressBarGrid, 6);
-        Grid.SetColumn(progressBarGrid, 3);
+        Grid.SetRow(progressBarPanel, 0);
+        Grid.SetRowSpan(progressBarPanel, 6);
+        Grid.SetColumn(progressBarPanel, 3);
 
         currentTitle.SetBinding(TextBlock.TextProperty, currentTitleBinding);
         totalDownloaded.SetBinding(TextBlock.TextProperty, totalDownloadedBinding);
@@ -213,7 +222,7 @@ class QueuedDownload(IDownload downloadItem) : IDisposable
         DisplayGrid.Children.Add(totalDownloaded);
         DisplayGrid.Children.Add(currentStatus);
         DisplayGrid.Children.Add(downloadSpeed);
-        DisplayGrid.Children.Add(progressBarGrid);
+        DisplayGrid.Children.Add(progressBarPanel);
 
         built = true;
     }

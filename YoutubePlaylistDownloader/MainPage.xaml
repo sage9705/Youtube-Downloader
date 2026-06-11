@@ -3,8 +3,7 @@
              xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:Controls="http://metro.mahapps.com/winfx/xaml/controls"
-             Margin="5"
-             Width="{Binding ActualWidth, ElementName=Skeleton}"
+             Margin="10"
              FlowDirection="{DynamicResource FlowDirection}">
 
     <Grid>
@@ -12,11 +11,11 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
-        <TextBlock Grid.Row="0" HorizontalAlignment="Center" Text="{DynamicResource Title}" FontSize="24" Foreground="{DynamicResource MahApps.Brushes.Accent}" Margin="5" />
+
 
         <Controls:MetroAnimatedTabControl Grid.Row="1" x:Name="MetroAnimatedTabControl">
             <Controls:MetroTabItem Header="{DynamicResource Search}">
-                <Grid x:Name="SearchPlaylistGrid" MinWidth="1200" >
+                <Grid x:Name="SearchPlaylistGrid" >
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
                         <RowDefinition />
@@ -26,15 +25,8 @@
                             <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition/>
                         </Grid.ColumnDefinitions>
-                        <Controls:Tile Cursor="Hand" Grid.Column="0" Width="50" Height="32.5" HorizontalAlignment="Left" Margin="0" Click="Tile_Click" >
-                            <Grid>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="Auto"/>
-                                    <RowDefinition/>
-                                </Grid.RowDefinitions>
-                                <iconPacks:PackIconModern Panel.ZIndex="5" HorizontalAlignment="Center" Grid.Row="0" Kind="Cog" Width="20" Height="20" Margin="0" />
-                                <TextBlock Panel.ZIndex="0" Grid.Row="1" Text="{DynamicResource Options}" FontSize="10" VerticalAlignment="Bottom"  />
-                            </Grid>
+                        <Controls:Tile Grid.Column="0" Click="Tile_Click" Style="{StaticResource RoundAccentIconButton}" Margin="0,0,10,0" ToolTip="{DynamicResource Options}" VerticalAlignment="Center">
+                            <iconPacks:PackIconModern Kind="Cog" Width="20" Height="20" />
                         </Controls:Tile>
                         <TextBox Grid.Column="1" HorizontalAlignment="Stretch"  x:Name="PlaylistLinkTextBox" Margin="5" FontSize="18" TextChanged="TextBox_TextChanged" Style="{StaticResource SeachBarPlaceHolder}" Tag="{DynamicResource InsertYoutubePlaylistLinkHere}"  />
                     </Grid>
@@ -46,37 +38,42 @@
                                 <RowDefinition Height="Auto"/>
                                 <RowDefinition Height="Auto"/>
                             </Grid.RowDefinitions>
-                            <Grid Grid.Row="0" Visibility="Collapsed" x:Name="PlaylistInfoGrid" Margin="7,0" HorizontalAlignment="Left" Width="Auto" MaxHeight="410" >
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="Auto"/>
-                                    <RowDefinition Height="Auto"/>
-                                    <RowDefinition Height="Auto"/>
-                                    <RowDefinition/>
-                                </Grid.RowDefinitions>
+                            <Border Grid.Row="0" Visibility="Collapsed" x:Name="PlaylistInfoGrid" Margin="7,10" 
+                                    Background="{DynamicResource MahApps.Brushes.Control.Background}" 
+                                    BorderBrush="{DynamicResource MahApps.Brushes.Control.Border}"
+                                    BorderThickness="1" CornerRadius="12" Padding="15" HorizontalAlignment="Stretch" Width="Auto">
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                    </Grid.RowDefinitions>
 
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition/>
-                                    <ColumnDefinition Width="Auto"/>
-                                    <ColumnDefinition/>
-                                </Grid.ColumnDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="Auto" MinWidth="120"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
 
-                                <!--Col 0-->
-                                <Image x:Name="PlaylistInfoImage" Margin="0,0,10,0" Grid.Column="0" Grid.Row="0" Grid.RowSpan="5" MaxWidth="320" MaxHeight="180" />
+                                    <!-- Col 0: Thumbnail with rounded corners -->
+                                    <Border Grid.Column="0" Grid.Row="0" Grid.RowSpan="4" CornerRadius="8" ClipToBounds="True" Margin="0,0,20,0" MaxWidth="320" MaxHeight="180">
+                                        <Image x:Name="PlaylistInfoImage" Stretch="UniformToFill" />
+                                    </Border>
 
-                                <!--Col 1-->
-                                <TextBlock Text="{DynamicResource PlaylistTitle}" Grid.Row="0" Grid.Column="1" FontSize="14" />
-                                <TextBlock Text="{DynamicResource Author}"        Grid.Row="1" Grid.Column="1" FontSize="14"/>
-                                <TextBlock Text="{DynamicResource Views}"         Grid.Row="2" Grid.Column="1" FontSize="14"/>
-                                <TextBlock Text="{DynamicResource TotalVideos}"   Grid.Row="3" Grid.Column="1" FontSize="14" x:Name="PlaylistTotalVideosTextBlockText" />
+                                    <!-- Col 1 Labels: bold and clean -->
+                                    <TextBlock Text="{DynamicResource PlaylistTitle}" Grid.Row="0" Grid.Column="1" FontSize="14" FontWeight="SemiBold" Margin="0,5" Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}" />
+                                    <TextBlock Text="{DynamicResource Author}"        Grid.Row="1" Grid.Column="1" FontSize="14" FontWeight="SemiBold" Margin="0,5" Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}" />
+                                    <TextBlock Text="{DynamicResource Views}"         Grid.Row="2" Grid.Column="1" FontSize="14" FontWeight="SemiBold" Margin="0,5" Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}" />
+                                    <TextBlock Text="{DynamicResource TotalVideos}"   Grid.Row="3" Grid.Column="1" FontSize="14" FontWeight="SemiBold" Margin="0,5" Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}" x:Name="PlaylistTotalVideosTextBlockText" />
 
-                                <!--Col 2-->
-
-                                <TextBlock x:Name="PlaylistTitleTextBlock"        Grid.Row="0" Grid.Column="2" FontSize="14"/>
-                                <TextBlock x:Name="PlaylistAuthorTextBlock"       Grid.Row="1" Grid.Column="2" FontSize="14"/>
-                                <TextBlock x:Name="PlaylistViewsTextBlock"        Grid.Row="2" Grid.Column="2" FontSize="14"/>
-                                <TextBlock x:Name="PlaylistTotalVideosTextBlock"  Grid.Row="3" Grid.Column="2" FontSize="14"/>
-
-                            </Grid>
+                                    <!-- Col 2 Values -->
+                                    <TextBlock x:Name="PlaylistTitleTextBlock"        Grid.Row="0" Grid.Column="2" FontSize="14" Margin="10,5" Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}" TextTrimming="CharacterEllipsis" />
+                                    <TextBlock x:Name="PlaylistAuthorTextBlock"       Grid.Row="1" Grid.Column="2" FontSize="14" Margin="10,5" Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}" TextTrimming="CharacterEllipsis" />
+                                    <TextBlock x:Name="PlaylistViewsTextBlock"        Grid.Row="2" Grid.Column="2" FontSize="14" Margin="10,5" Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}" TextTrimming="CharacterEllipsis" />
+                                    <TextBlock x:Name="PlaylistTotalVideosTextBlock"  Grid.Row="3" Grid.Column="2" FontSize="14" Margin="10,5" Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}" />
+                                </Grid>
+                            </Border>
 
                             <DataGrid Grid.Row="1" x:Name="VideosDataGrid" Visibility="Collapsed"
                                       AutoGenerateColumns="False" IsReadOnly="False"
@@ -139,7 +136,7 @@
             </Controls:MetroTabItem>
             <Controls:MetroTabItem Header="{DynamicResource Queue}" x:Name="QueueMetroTabItem">
                 <Grid>
-                    <ScrollViewer x:Name="QueueScrollViewer" VerticalScrollBarVisibility="Auto" MinWidth="1200" MaxWidth="1200" >
+                    <ScrollViewer x:Name="QueueScrollViewer" VerticalScrollBarVisibility="Auto" >
                         <StackPanel x:Name="QueueStackPanel">
                         </StackPanel>
                     </ScrollViewer>
@@ -152,7 +149,7 @@
                         <RowDefinition/>
                         <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
-                    <ScrollViewer Grid.Row="0" x:Name="BulkScrollViewer" VerticalScrollBarVisibility="Auto" MinWidth="1200" MaxWidth="1200" >
+                    <ScrollViewer Grid.Row="0" x:Name="BulkScrollViewer" VerticalScrollBarVisibility="Auto" >
                         <TextBox x:Name="BulkLinksTextBox" AcceptsReturn="True" TextWrapping="Wrap" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto" TextChanged="TextBox_TextChanged_1" FontSize="16" PreviewDrop="BulkLinksTextBox_PreviewDrop"  />
                     </ScrollViewer>
                     <WrapPanel Grid.Row="1" HorizontalAlignment="Center">
