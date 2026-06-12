@@ -3,4 +3,5 @@
                     xmlns:s="clr-namespace:System;assembly=mscorlib">
     <s:String x:Key="LanguageList">English;Deutsch;Dutch (NL);Español;Français;Italiano;Polski;Português (BR);Română;Türkçe;Русский;עברית;العربية;中文</s:String>
     <s:String x:Key="DownloadThumbnail">Download high-resolution video thumbnail</s:String>
+    <s:String x:Key="MiniPlayer">Mini Player</s:String>
 </ResourceDictionary>

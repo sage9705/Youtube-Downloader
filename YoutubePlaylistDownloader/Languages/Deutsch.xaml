@@ -191,4 +191,5 @@ wenn nur ein einzelnes Video heruntergeladen wird). In solchen Fällen werden fe
     <s:String x:Key="PlaylistInfoSavedSuccess">Playlist-Info wurde erfolgreich in {0} gespeichert</s:String>
     <s:String x:Key="Success">Erfolg</s:String>
     <s:String x:Key="DownloadThumbnail">Download high-resolution video thumbnail</s:String>
+    <s:String x:Key="MiniPlayer">Mini Player</s:String>
 </ResourceDictionary> 

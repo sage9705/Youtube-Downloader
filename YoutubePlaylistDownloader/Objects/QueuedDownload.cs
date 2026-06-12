@@ -6,6 +6,8 @@ class QueuedDownload(IDownload downloadItem) : IDisposable
     private IDownload item = downloadItem;
     private bool built = false;
 
+    public IDownload GetItem() => item;
+
     public Border GetDisplayGrid()
     {
         if (border == default(Border))
@@ -261,7 +263,7 @@ class QueuedDownload(IDownload downloadItem) : IDisposable
         {
             if (disposing)
             {
-                item.Dispose();
+                item?.Dispose();
             }
             border = null;
             item = null;

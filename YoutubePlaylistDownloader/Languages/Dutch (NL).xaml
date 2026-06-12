@@ -193,4 +193,5 @@ Let er aub op dat niet alle parameters altijd beschikbaar zijn (bijvoorbeeld, in
     <s:String x:Key="PlaylistInfoSavedSuccess">Afspeellijst info is succesvol opgeslagen in {0}</s:String>
     <s:String x:Key="Success">Succes</s:String>
     <s:String x:Key="DownloadThumbnail">Download high-resolution video thumbnail</s:String>
+    <s:String x:Key="MiniPlayer">Mini Player</s:String>
 </ResourceDictionary>

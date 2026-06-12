@@ -246,6 +246,30 @@ public partial class Skeleton : MetroWindow
         _modalTcs?.TrySetResult(MessageDialogResult.FirstAuxiliary);
     }
 
+    private MiniPlayerWindow miniPlayerWindow;
+
+    private void MiniPlayer_Click(object sender, RoutedEventArgs e)
+    {
+        if (miniPlayerWindow == null)
+        {
+            miniPlayerWindow = new MiniPlayerWindow();
+            miniPlayerWindow.Closed += (s, ev) => miniPlayerWindow = null;
+        }
+        
+        miniPlayerWindow.Show();
+        this.Hide();
+    }
+
+    public void RestoreMainWindow()
+    {
+        this.Show();
+        if (this.WindowState == WindowState.Minimized)
+        {
+            this.WindowState = WindowState.Normal;
+        }
+        this.Activate();
+    }
+
     private void SetWindow()
     {
 

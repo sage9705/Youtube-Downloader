@@ -76,6 +76,13 @@
                             <TextBlock Text="{DynamicResource About}" VerticalAlignment="Center" FontSize="15" />
                         </StackPanel>
                     </Controls:Tile>
+
+                    <Controls:Tile Click="MiniPlayer_Click" x:Name="MiniPlayerButton" Style="{StaticResource SidebarTileStyle}">
+                        <StackPanel Orientation="Horizontal">
+                            <iconPacks:PackIconModern Width="20" Height="20" Kind="MonitorPlay" VerticalAlignment="Center" Margin="15,0,15,0" />
+                            <TextBlock Text="{DynamicResource MiniPlayer}" VerticalAlignment="Center" FontSize="15" />
+                        </StackPanel>
+                    </Controls:Tile>
                 </StackPanel>
 
                 <StackPanel Grid.Row="2" HorizontalAlignment="Center">

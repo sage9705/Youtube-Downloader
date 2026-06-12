@@ -192,4 +192,5 @@ Please note that not all the parameters are always available (for example, when 
     <s:String x:Key="PlaylistInfoSavedSuccess">המידע על רשימת ההשמעה נשמר בהצלחה ב-{0}</s:String>
     <s:String x:Key="Success">הצלחה</s:String>
     <s:String x:Key="DownloadThumbnail">Download high-resolution video thumbnail</s:String>
+    <s:String x:Key="MiniPlayer">Mini Player</s:String>
 </ResourceDictionary>

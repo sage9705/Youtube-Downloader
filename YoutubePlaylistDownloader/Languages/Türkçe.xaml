@@ -195,4 +195,5 @@ Bütün parametrelerin her zaman geçerli olamayabileceği dikkate alınmalıdı
     <s:String x:Key="PlaylistInfoSavedSuccess">Oynatma listesi bilgisi başarıyla {0} konumuna kaydedildi</s:String>
     <s:String x:Key="Success">Başarılı</s:String>
     <s:String x:Key="DownloadThumbnail">Download high-resolution video thumbnail</s:String>
+    <s:String x:Key="MiniPlayer">Mini Player</s:String>
 </ResourceDictionary> 
