@@ -1,4 +1,4 @@
-﻿namespace YoutubePlaylistDownloader;
+namespace YoutubePlaylistDownloader;
 
 /// <summary>
 /// Interaction logic for About.xaml
@@ -28,16 +28,13 @@ public partial class About : UserControl
             if (latestVersion > GlobalConsts.VERSION)
             {
                 var changelog = await client.GetStringAsync("https://raw.githubusercontent.com/shaked6540/YoutubePlaylistDownloader/master/YoutubePlaylistDownloader/changelog.txt");
-                var dialogSettings = new MetroDialogSettings()
-                {
-                    AffirmativeButtonText = $"{FindResource("UpdateNow")}",
-                    NegativeButtonText = $"{FindResource("No")}",
-                    FirstAuxiliaryButtonText = $"{FindResource("UpdateWhenIExit")}",
-                    ColorScheme = MetroDialogColorScheme.Theme,
-                    DefaultButtonFocus = MessageDialogResult.Affirmative,
-                };
-                var update = await GlobalConsts.Current.ShowMessageAsync($"{FindResource("NewVersionAvailable")}", $"{FindResource("DoYouWantToUpdate")}\n{changelog}",
-                    MessageDialogStyle.AffirmativeAndNegativeAndSingleAuxiliary, dialogSettings);
+                var update = await GlobalConsts.Current.ShowCustomDialog(
+                    $"{FindResource("NewVersionAvailable")}", 
+                    $"{FindResource("DoYouWantToUpdate")}\n{changelog}",
+                    $"{FindResource("UpdateNow")}",
+                    $"{FindResource("No")}",
+                    $"{FindResource("UpdateWhenIExit")}"
+                );
                 if (update == MessageDialogResult.Affirmative)
                     GlobalConsts.LoadPage(new DownloadUpdate(latestVersion, changelog));
 
