@@ -1028,6 +1028,7 @@ public partial class DownloadPage : UserControl, IDisposable, IDownload
         GlobalConsts.LoadPage(GlobalConsts.MainPage.Load());
     }
 
+    [System.Runtime.Versioning.SupportedOSPlatform("windows7.0")]
     private void PauseResume_Click(object sender, RoutedEventArgs e)
     {
         TogglePause();
