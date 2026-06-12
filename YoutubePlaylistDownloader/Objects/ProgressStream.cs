@@ -1,39 +1,23 @@
-﻿namespace YoutubePlaylistDownloader.Objects;
+namespace YoutubePlaylistDownloader.Objects;
 
-/// <summary>
-/// Wraps another stream and provides reporting for when bytes are read or written to the stream.
-/// </summary>
 public class ProgressStream : Stream
 {
     #region Private Data Members
     private readonly Stream innerStream;
+    private readonly ManualResetEventSlim pauseGate;
     #endregion
 
     #region Constructor
-    /// <summary>
-    /// Creates a new ProgressStream supplying the stream for it to report on.
-    /// </summary>
-    /// <param name="streamToReportOn">The underlying stream that will be reported on when bytes are read or written.</param>
-    public ProgressStream(Stream streamToReportOn)
+    public ProgressStream(Stream streamToReportOn, ManualResetEventSlim pauseGate = null)
     {
-        innerStream = streamToReportOn != null ? streamToReportOn : throw new ArgumentNullException(nameof(streamToReportOn));
+        innerStream = streamToReportOn ?? throw new ArgumentNullException(nameof(streamToReportOn));
+        this.pauseGate = pauseGate;
     }
     #endregion
 
     #region Events
-    /// <summary>
-    /// Raised when bytes are read from the stream.
-    /// </summary>
     public event ProgressStreamReportEventHandler BytesRead;
-
-    /// <summary>
-    /// Raised when bytes are written to the stream.
-    /// </summary>
     public event ProgressStreamReportEventHandler BytesWritten;
-
-    /// <summary>
-    /// Raised when bytes are either read or written to the stream.
-    /// </summary>
     public event ProgressStreamReportEventHandler BytesMoved;
 
     protected virtual void OnBytesRead(int bytesMoved)
@@ -46,7 +30,6 @@ public class ProgressStream : Stream
     }
 
     protected virtual void OnBytesWritten(int bytesMoved) => BytesWritten?.Invoke(this, new ProgressStreamReportEventArgs(bytesMoved, innerStream.Length, innerStream.Position, false));
-
 
     protected virtual void OnBytesMoved(int bytesMoved, bool isRead) => BytesMoved?.Invoke(this, new ProgressStreamReportEventArgs(bytesMoved, innerStream.Length, innerStream.Position, isRead));
 
@@ -95,6 +78,7 @@ public class ProgressStream : Stream
 
     public override void Write(byte[] buffer, int offset, int count)
     {
+        pauseGate?.Wait();
         innerStream.Write(buffer, offset, count);
 
         OnBytesWritten(count);

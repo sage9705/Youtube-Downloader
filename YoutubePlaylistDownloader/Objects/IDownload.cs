@@ -1,4 +1,4 @@
-﻿namespace YoutubePlaylistDownloader.Objects;
+namespace YoutubePlaylistDownloader.Objects;
 
 interface IDownload : INotifyPropertyChanged, IDisposable
 {
@@ -10,6 +10,8 @@ interface IDownload : INotifyPropertyChanged, IDisposable
     string CurrentDownloadSpeed { get; set; }
     string CurrentTitle { get; set; }
     string CurrentStatus { get; set; }
+    bool IsPaused { get; }
     void OpenFolder_Click(object sender, RoutedEventArgs e);
     Task<bool> Cancel();
+    void TogglePause();
 }

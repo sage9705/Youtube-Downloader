@@ -32,12 +32,42 @@ public partial class DownloadPage : UserControl, IDisposable, IDownload
     private readonly List<Task> conversionTasks = [];
 
     public bool StillDownloading;
+    private readonly ManualResetEventSlim pauseGate = new(true);
+    private bool isPaused;
 
     private string title, currentTitle, currentStatus, totalDownloaded, currentDownloadSpeed;
     private int downloadPercent;
     public event PropertyChangedEventHandler PropertyChanged;
 
     public string ImageUrl { get; private set; }
+
+    public bool IsPaused => isPaused;
+
+    public void TogglePause()
+    {
+        if (isPaused)
+        {
+            isPaused = false;
+            pauseGate.Set();
+            Dispatcher.InvokeAsync(() =>
+            {
+                HeadlineTextBlock.Text = (string)FindResource("CurrentlyDownloading") + currentTitle;
+            });
+            CurrentStatus = string.Concat(FindResource("Downloading"));
+        }
+        else
+        {
+            isPaused = true;
+            pauseGate.Reset();
+            Dispatcher.InvokeAsync(() =>
+            {
+                HeadlineTextBlock.Text = (string)FindResource("Paused");
+            });
+            CurrentStatus = string.Concat(FindResource("Paused"));
+            CurrentDownloadSpeed = "0 MiB/s";
+        }
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsPaused)));
+    }
 
     public string Title
     {
@@ -374,7 +404,7 @@ public partial class DownloadPage : UserControl, IDisposable, IDownload
 
                     var primaryStream = AudioOnly ? bestAudio : (IStreamInfo)bestVideo;
 
-                    using (var stream = new ProgressStream(File.Create(fileLoc)))
+                    using (var stream = new ProgressStream(File.Create(fileLoc), pauseGate))
                     {
                         Stopwatch sw = new();
                         TimeSpan ts = new(0);
@@ -750,7 +780,7 @@ public partial class DownloadPage : UserControl, IDisposable, IDownload
 
                 var ffmpegArguments = "";
 
-                using (var stream = new ProgressStream(File.Create(fileLoc)))
+                using (var stream = new ProgressStream(File.Create(fileLoc), pauseGate))
                 {
                     Stopwatch sw = new();
                     TimeSpan ts = new(0);
@@ -998,6 +1028,20 @@ public partial class DownloadPage : UserControl, IDisposable, IDownload
         GlobalConsts.LoadPage(GlobalConsts.MainPage.Load());
     }
 
+    private void PauseResume_Click(object sender, RoutedEventArgs e)
+    {
+        TogglePause();
+        if (isPaused)
+        {
+            PauseResumeTile.Title = (string)FindResource("Resume");
+            PauseResumeIcon.Kind = PackIconModernKind.ControlPlay;
+        }
+        else
+        {
+            PauseResumeTile.Title = (string)FindResource("Pause");
+            PauseResumeIcon.Kind = PackIconModernKind.ControlPause;
+        }
+    }
     private void Update(int percent, IVideo video)
     {
         CurrentDownloadProgressBar.Value = percent;
@@ -1039,6 +1083,7 @@ public partial class DownloadPage : UserControl, IDisposable, IDownload
 
     private async Task<bool> ExitAsync()
     {
+        pauseGate.Set();
         cts?.Cancel(true);
         if (ffmpegList.Count > 0)
         {
@@ -1070,8 +1115,10 @@ public partial class DownloadPage : UserControl, IDisposable, IDownload
         {
             if (disposing)
             {
+                pauseGate.Set();
                 cts?.Cancel(true);
                 cts?.Dispose();
+                pauseGate.Dispose();
                 try
                 {
                     ffmpegList?.ForEach(x => { try { x.Kill(); } catch { } });

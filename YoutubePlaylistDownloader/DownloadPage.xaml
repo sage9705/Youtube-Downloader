@@ -38,6 +38,9 @@
             <Controls:Tile Click="Exit_Click" HorizontalAlignment="Center" Title="{DynamicResource Back}" Margin="5" Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" MinWidth="200" Width="Auto" HorizontalTitleAlignment="Center" Controls:ControlsHelper.MouseOverBorderBrush="{DynamicResource BlackBrush}" Style="{StaticResource LargeTileStyle}">
                 <iconPacks:PackIconModern Width="40" Height="40" Kind="ArrowLeft" />
             </Controls:Tile>
+            <Controls:Tile Click="PauseResume_Click" x:Name="PauseResumeTile" HorizontalAlignment="Center" Title="{DynamicResource Pause}" Margin="5" MinWidth="200" Width="Auto" HorizontalTitleAlignment="Center" Controls:ControlsHelper.MouseOverBorderBrush="{DynamicResource BlackBrush}" Style="{StaticResource LargeTileStyle}">
+                <iconPacks:PackIconModern Width="40" Height="40" x:Name="PauseResumeIcon" Kind="ControlPause" />
+            </Controls:Tile>
             <Controls:Tile Click="Background_Exit" HorizontalAlignment="Center" Title="{DynamicResource DownloadInBackground}" Margin="5" Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" MinWidth="200" Width="Auto" HorizontalTitleAlignment="Center" Controls:ControlsHelper.MouseOverBorderBrush="{DynamicResource BlackBrush}" Style="{StaticResource LargeTileStyle}">
                 <iconPacks:PackIconModern Width="40" Height="40" Kind="InboxIn" />
             </Controls:Tile>

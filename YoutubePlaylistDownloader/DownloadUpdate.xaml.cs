@@ -1,4 +1,4 @@
-﻿namespace YoutubePlaylistDownloader;
+namespace YoutubePlaylistDownloader;
 
 /// <summary>
 /// Interaction logic for DownloadUpdate.xaml
@@ -263,6 +263,10 @@ public partial class DownloadUpdate : UserControl, IDownload
             GlobalConsts.UpdateLater = true;
         }
     }
+
+    public bool IsPaused => false;
+
+    public void TogglePause() { }
 
     public Task<bool> Cancel()
     {

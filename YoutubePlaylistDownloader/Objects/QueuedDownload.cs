@@ -71,10 +71,36 @@ class QueuedDownload(IDownload downloadItem) : IDisposable
                 GlobalConsts.Downloads.Remove(this);
         };
 
-        //Col 0:
-        Grid.SetRow(stopButton, 0);
-        Grid.SetRowSpan(stopButton, 6);
-        Grid.SetColumn(stopButton, 0);
+        var pauseIcon = new PackIconModern { Width = 18, Height = 18, Kind = PackIconModernKind.ControlPause };
+        var pauseButton = new Tile
+        {
+            Width = 36,
+            Height = 36,
+            Margin = margin,
+            Content = pauseIcon,
+            VerticalAlignment = VerticalAlignment.Center,
+            HorizontalAlignment = HorizontalAlignment.Center,
+            Style = (Style)Application.Current.FindResource("RoundAccentIconButton")
+        };
+
+        pauseButton.Click += (s, e) =>
+        {
+            item.TogglePause();
+            pauseIcon.Kind = item.IsPaused ? PackIconModernKind.ControlPlay : PackIconModernKind.ControlPause;
+        };
+
+        var buttonPanel = new StackPanel
+        {
+            Orientation = System.Windows.Controls.Orientation.Vertical,
+            VerticalAlignment = VerticalAlignment.Center,
+            HorizontalAlignment = HorizontalAlignment.Center
+        };
+        buttonPanel.Children.Add(stopButton);
+        buttonPanel.Children.Add(pauseButton);
+
+        Grid.SetRow(buttonPanel, 0);
+        Grid.SetRowSpan(buttonPanel, 6);
+        Grid.SetColumn(buttonPanel, 0);
 
 
         var image = new Image
@@ -215,7 +241,7 @@ class QueuedDownload(IDownload downloadItem) : IDisposable
         downloadPercent.SetBinding(TextBlock.TextProperty, downloadPercentBinding);
 
         //add everything to grid
-        DisplayGrid.Children.Add(stopButton);
+        DisplayGrid.Children.Add(buttonPanel);
         DisplayGrid.Children.Add(image);
         DisplayGrid.Children.Add(title);
         DisplayGrid.Children.Add(currentTitle);

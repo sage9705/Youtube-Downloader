@@ -186,4 +186,7 @@ Please note that not all the parameters are always available (for example, when 
     <s:String x:Key="Channel">Channel</s:String>
     <s:String x:Key="Selected">selected</s:String>
     <s:String x:Key="NoVideosSelected">No videos selected</s:String>
+    <s:String x:Key="Pause">Pause</s:String>
+    <s:String x:Key="Resume">Resume</s:String>
+    <s:String x:Key="Paused">Paused</s:String>
 </ResourceDictionary> 
