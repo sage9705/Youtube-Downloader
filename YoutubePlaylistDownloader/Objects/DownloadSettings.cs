@@ -1,4 +1,4 @@
-﻿namespace YoutubePlaylistDownloader.Objects;
+namespace YoutubePlaylistDownloader.Objects;
 
 [JsonObject]
 public class DownloadSettings
@@ -83,13 +83,15 @@ public class DownloadSettings
     [DefaultValue("default")]
     public string VideoLanguage { get; set; }
 
+    [JsonProperty(DefaultValueHandling = DefaultValueHandling.Populate)]
+    [DefaultValue(false)]
+    public bool NumberVideosByPlaylistIndex { get; set; }
 
-    [JsonConstructor]
     public DownloadSettings(string saveFormat, bool audioOnly, VideoQuality quality, bool preferHighestFPS,
     bool preferQuality, bool convert, bool setBitrate, string bitrate, bool downloadCaptions, string captionsLanguage,
     bool savePlaylistsInDifferentDirectories, bool subset, int subsetStartIndex, int subsetEndIndex, bool openDestinationFolderWhenDone,
     bool tagAudioFile, bool filterVideosByLength, bool filterMode, double filterByLengthValue, string filenamePattern, bool skipExisting,
-    string videoSaveFormat, string videoLanguage)
+    string videoSaveFormat, string videoLanguage, bool numberVideosByPlaylistIndex)
     {
         SaveFormat = saveFormat;
         AudioOnly = audioOnly;
@@ -114,6 +116,7 @@ public class DownloadSettings
         SkipExisting = skipExisting;
         VideoSaveFormat = videoSaveFormat;
         VideoLanguage = videoLanguage;
+        NumberVideosByPlaylistIndex = numberVideosByPlaylistIndex;
     }
 
     public DownloadSettings(DownloadSettings settings)
@@ -141,6 +144,7 @@ public class DownloadSettings
         SkipExisting = settings.SkipExisting;
         VideoSaveFormat = settings.VideoSaveFormat;
         VideoLanguage = settings.VideoLanguage;
+        NumberVideosByPlaylistIndex = settings.NumberVideosByPlaylistIndex;
     }
 
     public string GetFilenameByPattern(IVideo video, int index, string file, FullPlaylist playlist = null)
@@ -196,6 +200,13 @@ public class DownloadSettings
             .Replace("$videoid", video.Id)
             .Replace("$playlist", playlist?.Title)
             .Replace("$genre", genre);
+
+        if (NumberVideosByPlaylistIndex)
+        {
+            var totalCount = playlist?.Videos?.Count() ?? 0;
+            var padWidth = totalCount > 0 ? totalCount.ToString().Length : 2;
+            result = $"{(index + 1).ToString().PadLeft(padWidth, '0')} - {result}";
+        }
 
         return string.IsNullOrWhiteSpace(result) ? title : result;
     }

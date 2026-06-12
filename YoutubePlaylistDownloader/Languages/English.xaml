@@ -189,4 +189,8 @@ Please note that not all the parameters are always available (for example, when 
     <s:String x:Key="Pause">Pause</s:String>
     <s:String x:Key="Resume">Resume</s:String>
     <s:String x:Key="Paused">Paused</s:String>
+    <s:String x:Key="NumberVideosByPlaylistIndex">Number videos by playlist index</s:String>
+    <s:String x:Key="SavePlaylistInfo">Save playlist info</s:String>
+    <s:String x:Key="PlaylistInfoSavedSuccess">Playlist info has been successfully saved to {0}</s:String>
+    <s:String x:Key="Success">Success</s:String>
 </ResourceDictionary> 

@@ -1,4 +1,4 @@
-﻿namespace YoutubePlaylistDownloader;
+namespace YoutubePlaylistDownloader;
 
 /// <summary>
 /// Interaction logic for DownloadSettings.xaml
@@ -52,6 +52,7 @@ public partial class DownloadSettingsControl : UserControl
         CaptionsLanguagesComboBox.SelectedItem = Languages[settings.CaptionsLanguage ?? "en"];
         AudioOnlyCheckBox.IsChecked = settings.AudioOnly;
         UniquePlaylistDirectoryCheckBox.IsChecked = settings.SavePlaylistsInDifferentDirectories;
+        NumberVideosByPlaylistIndexCheckBox.IsChecked = settings.NumberVideosByPlaylistIndex;
         PlaylistIndexCheckBox.IsChecked = settings.Subset;
         PlaylistStartIndexTextBox.Text = settings.SubsetStartIndex.ToString();
         PlaylistEndIndexTextBox.Text = settings.SubsetEndIndex.ToString();
@@ -91,6 +92,8 @@ public partial class DownloadSettingsControl : UserControl
         AudioOnlyCheckBox.Unchecked += AudioOnlyCheckBox_Unchecked;
         UniquePlaylistDirectoryCheckBox.Checked += UniquePlaylistDirectoryCheckBox_Checked;
         UniquePlaylistDirectoryCheckBox.Unchecked += UniquePlaylistDirectoryCheckBox_Unchecked;
+        NumberVideosByPlaylistIndexCheckBox.Checked += NumberVideosByPlaylistIndexCheckBox_Checked;
+        NumberVideosByPlaylistIndexCheckBox.Unchecked += NumberVideosByPlaylistIndexCheckBox_Unchecked;
         PlaylistIndexCheckBox.Checked += PlaylistIndexCheckBox_Checked;
         PlaylistIndexCheckBox.Unchecked += PlaylistIndexCheckBox_Unchecked;
         PlaylistStartIndexTextBox.TextChanged += PlaylistStartIndexTextBox_TextChanged;
@@ -256,6 +259,24 @@ public partial class DownloadSettingsControl : UserControl
         if (GlobalConsts.settings.SaveDownloadOptions)
         {
             GlobalConsts.DownloadSettings.Subset = PlaylistIndexCheckBox.IsChecked.Value;
+            GlobalConsts.SaveDownloadSettings();
+        }
+    }
+
+    private void NumberVideosByPlaylistIndexCheckBox_Unchecked(object sender, RoutedEventArgs e)
+    {
+        if (GlobalConsts.settings.SaveDownloadOptions)
+        {
+            GlobalConsts.DownloadSettings.NumberVideosByPlaylistIndex = NumberVideosByPlaylistIndexCheckBox.IsChecked.Value;
+            GlobalConsts.SaveDownloadSettings();
+        }
+    }
+
+    private void NumberVideosByPlaylistIndexCheckBox_Checked(object sender, RoutedEventArgs e)
+    {
+        if (GlobalConsts.settings.SaveDownloadOptions)
+        {
+            GlobalConsts.DownloadSettings.NumberVideosByPlaylistIndex = NumberVideosByPlaylistIndexCheckBox.IsChecked.Value;
             GlobalConsts.SaveDownloadSettings();
         }
     }

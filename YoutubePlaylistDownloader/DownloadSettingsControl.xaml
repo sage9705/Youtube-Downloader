@@ -75,6 +75,7 @@
                 <Border Style="{StaticResource SectionCard}">
                     <StackPanel>
                         <TextBlock Text="{DynamicResource Playlist}" Style="{StaticResource SectionTitle}" />
+                        <CheckBox Content="{DynamicResource NumberVideosByPlaylistIndex}" Margin="7" x:Name="NumberVideosByPlaylistIndexCheckBox" />
                         <StackPanel Orientation="Horizontal">
                             <CheckBox Content="{DynamicResource PlaylistIndex}" Margin="7" x:Name="PlaylistIndexCheckBox" VerticalAlignment="Center"/>
                             <TextBox Width="50" x:Name="PlaylistStartIndexTextBox" Text="1" Margin="5,7" TextAlignment="Center" VerticalAlignment="Center"/>

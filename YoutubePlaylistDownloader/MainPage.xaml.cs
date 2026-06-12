@@ -160,6 +160,7 @@ public partial class MainPage : UserControl
         var hasSelection = selected > 0;
         if (DownloadButton != null) DownloadButton.IsEnabled = hasSelection;
         if (DownloadInBackgroundButton != null) DownloadInBackgroundButton.IsEnabled = hasSelection;
+        if (SavePlaylistInfoButton != null) SavePlaylistInfoButton.IsEnabled = hasSelection;
     }
 
     private void SelectAllCheckBox_Changed(object sender, RoutedEventArgs e)
@@ -247,6 +248,7 @@ public partial class MainPage : UserControl
 
             DownloadButton.IsEnabled = downloadEnabled;
             DownloadInBackgroundButton.IsEnabled = downloadEnabled;
+            SavePlaylistInfoButton.IsEnabled = downloadEnabled;
 
         });
 
@@ -270,6 +272,50 @@ public partial class MainPage : UserControl
             _ = new DownloadPage(list, GlobalConsts.DownloadSettings.Clone(), silent: true, videos: selectedVideos);
             VideoList = new List<IVideo>();
             PlaylistLinkTextBox.Text = string.Empty;
+        }
+    }
+
+    private async void SavePlaylistInfoButton_Click(object sender, RoutedEventArgs e)
+    {
+        if (list != null || VideoList.Any())
+        {
+            var selectedVideos = GetSelectedVideos().ToList();
+            if (!selectedVideos.Any())
+            {
+                await GlobalConsts.ShowMessage((string)FindResource("Error"), (string)FindResource("NoVideosSelected")).ConfigureAwait(false);
+                return;
+            }
+
+            try
+            {
+                var saveDirectory = GlobalConsts.settings.SaveDirectory;
+                if (!Directory.Exists(saveDirectory))
+                    Directory.CreateDirectory(saveDirectory);
+
+                var titleText = list?.BasePlaylist?.Title ?? list?.Title ?? "Playlist";
+                var cleanTitle = GlobalConsts.CleanFileName(titleText);
+                var filePath = Path.Combine(saveDirectory, $"{cleanTitle}_Info.txt");
+
+                using (var writer = new StreamWriter(filePath))
+                {
+                    await writer.WriteLineAsync($"Playlist: {titleText}");
+                    await writer.WriteLineAsync($"Total Videos: {selectedVideos.Count}");
+                    await writer.WriteLineAsync("--------------------------------------------------");
+                    
+                    for (int i = 0; i < selectedVideos.Count; i++)
+                    {
+                        var video = selectedVideos[i];
+                        await writer.WriteLineAsync($"{i + 1}. {video.Title} ({video.Duration})");
+                    }
+                }
+
+                await GlobalConsts.ShowMessage((string)FindResource("Success"), string.Format((string)FindResource("PlaylistInfoSavedSuccess"), filePath)).ConfigureAwait(false);
+            }
+            catch (Exception ex)
+            {
+                await GlobalConsts.Log(ex.ToString(), "MainPage SavePlaylistInfoButton_Click");
+                await GlobalConsts.ShowMessage((string)FindResource("Error"), ex.Message).ConfigureAwait(false);
+            }
         }
     }
 

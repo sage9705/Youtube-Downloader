@@ -128,6 +128,9 @@
                                 <Controls:Tile Style="{DynamicResource SmallTileStyle}" x:Name="DownloadInBackgroundButton" Title="{DynamicResource DownloadInBackground}" MinWidth="200" Width="Auto" HorizontalTitleAlignment="Center" IsEnabled="False" Click="DownloadInBackgroundButton_Click">
                                     <iconPacks:PackIconModern Width="40" Height="40" Kind="Reset" />
                                 </Controls:Tile>
+                                <Controls:Tile Style="{DynamicResource SmallTileStyle}" x:Name="SavePlaylistInfoButton" Title="{DynamicResource SavePlaylistInfo}" MinWidth="200" Width="Auto" HorizontalTitleAlignment="Center" IsEnabled="False" Click="SavePlaylistInfoButton_Click">
+                                    <iconPacks:PackIconModern Width="40" Height="40" Kind="Save" />
+                                </Controls:Tile>
                             </WrapPanel>
                         </Grid>
                     </ScrollViewer>
