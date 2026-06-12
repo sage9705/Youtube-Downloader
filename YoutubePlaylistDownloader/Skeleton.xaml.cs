@@ -33,17 +33,14 @@ public partial class Skeleton : MetroWindow
             if (latestVersion > GlobalConsts.VERSION)
             {
                 var changelog = await client.GetStringAsync("https://raw.githubusercontent.com/shaked6540/YoutubePlaylistDownloader/master/YoutubePlaylistDownloader/changelog.txt");
-                var dialogSettings = new MetroDialogSettings()
-                {
-                    AffirmativeButtonText = $"{FindResource("UpdateNow")}",
-                    NegativeButtonText = $"{FindResource("No")}",
-                    FirstAuxiliaryButtonText = $"{FindResource("UpdateWhenIExit")}",
-                    ColorScheme = MetroDialogColorScheme.Theme,
-                    DefaultButtonFocus = MessageDialogResult.Affirmative,
-                };
+                var update = await this.ShowCustomDialog(
+                    $"{FindResource("NewVersionAvailable")}", 
+                    $"{FindResource("DoYouWantToUpdate")}\n{changelog}",
+                    $"{FindResource("UpdateNow")}",
+                    $"{FindResource("No")}",
+                    $"{FindResource("UpdateWhenIExit")}"
+                );
 
-                var update = await this.ShowMessageAsync($"{FindResource("NewVersionAvailable")}", $"{FindResource("DoYouWantToUpdate")}\n{changelog}",
-                    MessageDialogStyle.AffirmativeAndNegativeAndSingleAuxiliary, dialogSettings);
                 if (update == MessageDialogResult.Affirmative)
                     GlobalConsts.LoadPage(new DownloadUpdate(latestVersion, changelog));
 
@@ -59,10 +56,7 @@ public partial class Skeleton : MetroWindow
         }
     }
 
-    public Task<MessageDialogResult> CustomYesNoDialog(string title, string message, MetroDialogSettings dialogSettings)
-    {
-        return this.ShowMessageAsync(title, message, MessageDialogStyle.AffirmativeAndNegative, dialogSettings);
-    }
+
     public async Task ShowSelectableDialog(string title, string message, Action retryAction, Action cancelAction = null)
     {
 
@@ -189,8 +183,26 @@ public partial class Skeleton : MetroWindow
 
     public async Task<MessageDialogResult> ShowYesNoDialog(string title, string message)
     {
+        return await ShowCustomDialog(title, message, $"{FindResource("Yes")}", $"{FindResource("No")}");
+    }
+
+    public async Task<MessageDialogResult> ShowCustomDialog(string title, string message, string affirmText, string negText, string auxText = null)
+    {
         ModalTitle.Text = title;
         ModalMessage.Text = message;
+        
+        ModalYesButton.Content = affirmText;
+        ModalNoButton.Content = negText;
+        
+        if (auxText != null)
+        {
+            ModalAuxButton.Content = auxText;
+            ModalAuxButton.Visibility = Visibility.Visible;
+        }
+        else
+        {
+            ModalAuxButton.Visibility = Visibility.Collapsed;
+        }
         
         _modalTcs = new TaskCompletionSource<MessageDialogResult>();
         ModalOverlay.Visibility = Visibility.Visible;
@@ -208,6 +220,12 @@ public partial class Skeleton : MetroWindow
     {
         ModalOverlay.Visibility = Visibility.Collapsed;
         _modalTcs?.TrySetResult(MessageDialogResult.Negative);
+    }
+
+    private void ModalAux_Click(object sender, RoutedEventArgs e)
+    {
+        ModalOverlay.Visibility = Visibility.Collapsed;
+        _modalTcs?.TrySetResult(MessageDialogResult.FirstAuxiliary);
     }
 
     private void SetWindow()

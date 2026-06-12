@@ -117,6 +117,7 @@
 
                     <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right">
                         <Button x:Name="ModalYesButton" Click="ModalYes_Click" Content="{DynamicResource Yes}" Margin="0,0,15,0" MinWidth="120" Height="40" Background="{DynamicResource MahApps.Brushes.Accent}" Foreground="{DynamicResource MahApps.Brushes.ThemeBackground}" BorderThickness="0" FontSize="16" FontWeight="SemiBold" Cursor="Hand" />
+                        <Button x:Name="ModalAuxButton" Click="ModalAux_Click" Visibility="Collapsed" Margin="0,0,15,0" MinWidth="120" Height="40" FontSize="16" Cursor="Hand" />
                         <Button x:Name="ModalNoButton" Click="ModalNo_Click" Content="{DynamicResource No}" MinWidth="100" Height="40" FontSize="16" Cursor="Hand" />
                     </StackPanel>
                 </Grid>
