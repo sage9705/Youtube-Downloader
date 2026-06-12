@@ -174,7 +174,7 @@ public partial class Skeleton : MetroWindow
     }
     public async Task ShowMessage(string title, string message)
     {
-        await this.ShowMessageAsync(title, message);
+        await ShowCustomDialog(title, message, "OK", null);
         if (DefaultFlyout.IsOpen)
             DefaultFlyout.IsOpen = false;
     }
@@ -186,13 +186,29 @@ public partial class Skeleton : MetroWindow
         return await ShowCustomDialog(title, message, $"{FindResource("Yes")}", $"{FindResource("No")}");
     }
 
-    public async Task<MessageDialogResult> ShowCustomDialog(string title, string message, string affirmText, string negText, string auxText = null)
+    public async Task<MessageDialogResult> ShowCustomDialog(string title, string message, string affirmText, string negText = null, string auxText = null)
     {
         ModalTitle.Text = title;
         ModalMessage.Text = message;
         
+        if (title.Contains("Success", StringComparison.OrdinalIgnoreCase))
+            ModalIcon.Kind = MahApps.Metro.IconPacks.PackIconModernKind.Check;
+        else if (title.Contains("Error", StringComparison.OrdinalIgnoreCase))
+            ModalIcon.Kind = MahApps.Metro.IconPacks.PackIconModernKind.Close;
+        else
+            ModalIcon.Kind = MahApps.Metro.IconPacks.PackIconModernKind.Warning;
+        
         ModalYesButton.Content = affirmText;
-        ModalNoButton.Content = negText;
+        
+        if (negText != null)
+        {
+            ModalNoButton.Content = negText;
+            ModalNoButton.Visibility = Visibility.Visible;
+        }
+        else
+        {
+            ModalNoButton.Visibility = Visibility.Collapsed;
+        }
         
         if (auxText != null)
         {

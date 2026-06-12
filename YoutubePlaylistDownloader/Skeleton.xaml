@@ -109,7 +109,7 @@
                     </Grid.RowDefinitions>
 
                     <StackPanel Orientation="Horizontal" Grid.Row="0" Margin="0,0,0,20">
-                        <iconPacks:PackIconModern Kind="Warning" Width="36" Height="36" Foreground="{DynamicResource MahApps.Brushes.Accent}" Margin="0,0,15,0" VerticalAlignment="Center"/>
+                        <iconPacks:PackIconModern x:Name="ModalIcon" Kind="Warning" Width="36" Height="36" Foreground="{DynamicResource MahApps.Brushes.Accent}" Margin="0,0,15,0" VerticalAlignment="Center"/>
                         <TextBlock x:Name="ModalTitle" FontSize="26" FontWeight="SemiBold" Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}" VerticalAlignment="Center"/>
                     </StackPanel>
 
