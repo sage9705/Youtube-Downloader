@@ -1,4 +1,4 @@
-﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:s="clr-namespace:System;assembly=mscorlib"
                     xml:space="preserve">
@@ -179,5 +179,17 @@ U kunt eenderwelk ander tekst tussen de parameters zetten, alleen de parameters 
 Let er aub op dat niet alle parameters altijd beschikbaar zijn (bijvoorbeeld, indien u slechts één video download, zou de $playlisttiel variabele niet beschikbaar zijn), en in het geval dat het ontbreekt, zal het verwijderd worden uit het bestandsnaam.</s:String>
     <s:String x:Key="CopyToClipboard">Kopieer naar klembord</s:String>
     <s:String x:Key="SaveToTextFile">Sla tekst op als bestand</s:String>
-    <s:String x:Key="VideoLanguage">Video Language: </s:String>
+    <s:String x:Key="VideoLanguage">Videotaal: </s:String>
+    <s:String x:Key="SelectAll">Alles selecteren</s:String>
+    <s:String x:Key="Duration">Duur</s:String>
+    <s:String x:Key="Channel">Kanaal</s:String>
+    <s:String x:Key="Selected">geselecteerd</s:String>
+    <s:String x:Key="NoVideosSelected">Geen video's geselecteerd</s:String>
+    <s:String x:Key="Pause">Pauzeren</s:String>
+    <s:String x:Key="Resume">Hervatten</s:String>
+    <s:String x:Key="Paused">Gepauzeerd</s:String>
+    <s:String x:Key="NumberVideosByPlaylistIndex">Nummer video's op afspeellijst index</s:String>
+    <s:String x:Key="SavePlaylistInfo">Afspeellijst info opslaan</s:String>
+    <s:String x:Key="PlaylistInfoSavedSuccess">Afspeellijst info is succesvol opgeslagen in {0}</s:String>
+    <s:String x:Key="Success">Succes</s:String>
 </ResourceDictionary>

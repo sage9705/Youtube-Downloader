@@ -176,5 +176,17 @@ You can add any other text between the parameters, only the parameters will be r
 Please note that not all the parameters are always available (for example, when downloading a single video the $playlisttitle variable would not be available), and in case they are missing they will be removed from the file name</s:String>
     <s:String x:Key="CopyToClipboard">Copy to clipboard</s:String>
     <s:String x:Key="SaveToTextFile">Save to text file</s:String>
-    <s:String x:Key="VideoLanguage">Video Language: </s:String>
+    <s:String x:Key="VideoLanguage">Lingua del video: </s:String>
+    <s:String x:Key="SelectAll">Seleziona tutto</s:String>
+    <s:String x:Key="Duration">Durata</s:String>
+    <s:String x:Key="Channel">Canale</s:String>
+    <s:String x:Key="Selected">selezionato</s:String>
+    <s:String x:Key="NoVideosSelected">Nessun video selezionato</s:String>
+    <s:String x:Key="Pause">Pausa</s:String>
+    <s:String x:Key="Resume">Riprendi</s:String>
+    <s:String x:Key="Paused">In pausa</s:String>
+    <s:String x:Key="NumberVideosByPlaylistIndex">Numera i video in base all'indice della playlist</s:String>
+    <s:String x:Key="SavePlaylistInfo">Salva le informazioni della playlist</s:String>
+    <s:String x:Key="PlaylistInfoSavedSuccess">Le informazioni della playlist sono state salvate con successo in {0}</s:String>
+    <s:String x:Key="Success">Successo</s:String>
 </ResourceDictionary>

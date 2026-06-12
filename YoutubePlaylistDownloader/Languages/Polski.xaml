@@ -1,4 +1,4 @@
-﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:s="clr-namespace:System;assembly=mscorlib"
                     xml:space="preserve">
@@ -180,5 +180,17 @@ Możesz dodać dowolny inny tekst między parametrami, tylko parametry zostaną 
 Należy pamiętać, że nie wszystkie parametry są zawsze dostępne (na przykład podczas pobierania pojedynczego filmu zmienna $playlisttitle byłaby niedostępna), aw przypadku ich braku zostaną usunięte z nazwy plikus</s:String>
     <s:String x:Key="CopyToClipboard">Skopiuj do schowka</s:String>
     <s:String x:Key="SaveToTextFile">Zapisz do pliku tekstowego</s:String>
-    <s:String x:Key="VideoLanguage">Video Language: </s:String>
+    <s:String x:Key="VideoLanguage">Język wideo: </s:String>
+    <s:String x:Key="SelectAll">Zaznacz wszystko</s:String>
+    <s:String x:Key="Duration">Czas trwania</s:String>
+    <s:String x:Key="Channel">Kanał</s:String>
+    <s:String x:Key="Selected">zaznaczono</s:String>
+    <s:String x:Key="NoVideosSelected">Brak zaznaczonych filmów</s:String>
+    <s:String x:Key="Pause">Pauza</s:String>
+    <s:String x:Key="Resume">Wznów</s:String>
+    <s:String x:Key="Paused">Wstrzymano</s:String>
+    <s:String x:Key="NumberVideosByPlaylistIndex">Numeruj filmy według indeksu listy odtwarzania</s:String>
+    <s:String x:Key="SavePlaylistInfo">Zapisz informacje o liście odtwarzania</s:String>
+    <s:String x:Key="PlaylistInfoSavedSuccess">Informacje o liście odtwarzania zostały pomyślnie zapisane w {0}</s:String>
+    <s:String x:Key="Success">Sukces</s:String>
 </ResourceDictionary> 

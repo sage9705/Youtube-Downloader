@@ -181,5 +181,17 @@ Parametreler arasına istendiği gibi metin eklenebilir, sadece parametreler de�
 Bütün parametrelerin her zaman geçerli olamayabileceği dikkate alınmalıdır (örneğin, tek bir video indirirken $playlist parametresi mevcut olmayacaktır), ve geçersiz olması durumunda dosya ismine dahil edilmeyecektir.</s:String>
     <s:String x:Key="CopyToClipboard">Panoya kopyala</s:String>
     <s:String x:Key="SaveToTextFile">Metin dosyasına kaydet</s:String>
-    <s:String x:Key="VideoLanguage">Video Language: </s:String>
+    <s:String x:Key="VideoLanguage">Video Dili: </s:String>
+    <s:String x:Key="SelectAll">Tümünü Seç</s:String>
+    <s:String x:Key="Duration">Süre</s:String>
+    <s:String x:Key="Channel">Kanal</s:String>
+    <s:String x:Key="Selected">seçildi</s:String>
+    <s:String x:Key="NoVideosSelected">Video seçilmedi</s:String>
+    <s:String x:Key="Pause">Duraklat</s:String>
+    <s:String x:Key="Resume">Devam Et</s:String>
+    <s:String x:Key="Paused">Duraklatıldı</s:String>
+    <s:String x:Key="NumberVideosByPlaylistIndex">Videoları oynatma listesi dizinine göre numaralandır</s:String>
+    <s:String x:Key="SavePlaylistInfo">Oynatma listesi bilgisini kaydet</s:String>
+    <s:String x:Key="PlaylistInfoSavedSuccess">Oynatma listesi bilgisi başarıyla {0} konumuna kaydedildi</s:String>
+    <s:String x:Key="Success">Başarılı</s:String>
 </ResourceDictionary> 

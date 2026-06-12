@@ -177,5 +177,17 @@ redémarrage du programme pour prendre effet)</s:String>
     </s:String>
     <s:String x:Key="CopyToClipboard">Copier dans le presse-papier</s:String>
     <s:String x:Key="SaveToTextFile">Enregistrer dans un fichier texte</s:String>
-    <s:String x:Key="VideoLanguage">Video Language: </s:String>
+    <s:String x:Key="VideoLanguage">Langue de la vidéo : </s:String>
+    <s:String x:Key="SelectAll">Tout sélectionner</s:String>
+    <s:String x:Key="Duration">Durée</s:String>
+    <s:String x:Key="Channel">Chaîne</s:String>
+    <s:String x:Key="Selected">sélectionné</s:String>
+    <s:String x:Key="NoVideosSelected">Aucune vidéo sélectionnée</s:String>
+    <s:String x:Key="Pause">Pause</s:String>
+    <s:String x:Key="Resume">Reprendre</s:String>
+    <s:String x:Key="Paused">En pause</s:String>
+    <s:String x:Key="NumberVideosByPlaylistIndex">Numéroter les vidéos selon l'index de la playlist</s:String>
+    <s:String x:Key="SavePlaylistInfo">Enregistrer les informations de la playlist</s:String>
+    <s:String x:Key="PlaylistInfoSavedSuccess">Les informations de la playlist ont été enregistrées avec succès dans {0}</s:String>
+    <s:String x:Key="Success">Succès</s:String>
 </ResourceDictionary> 

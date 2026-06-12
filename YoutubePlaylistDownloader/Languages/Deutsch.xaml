@@ -177,5 +177,17 @@ Du kannst beliebigen Text zwischen den Parametern hinzufügen; nur die Parameter
 wenn nur ein einzelnes Video heruntergeladen wird). In solchen Fällen werden fehlende Parameter aus dem Dateinamen entfernt.</s:String>
     <s:String x:Key="CopyToClipboard">In die Zwischenablage kopieren</s:String>
     <s:String x:Key="SaveToTextFile">Speichern in eine Textdatei</s:String>
-    <s:String x:Key="VideoLanguage">Video Language: </s:String>
+    <s:String x:Key="VideoLanguage">Video-Sprache: </s:String>
+    <s:String x:Key="SelectAll">Alle auswählen</s:String>
+    <s:String x:Key="Duration">Dauer</s:String>
+    <s:String x:Key="Channel">Kanal</s:String>
+    <s:String x:Key="Selected">ausgewählt</s:String>
+    <s:String x:Key="NoVideosSelected">Keine Videos ausgewählt</s:String>
+    <s:String x:Key="Pause">Pausieren</s:String>
+    <s:String x:Key="Resume">Fortsetzen</s:String>
+    <s:String x:Key="Paused">Pausiert</s:String>
+    <s:String x:Key="NumberVideosByPlaylistIndex">Nummeriere Videos nach Playlist-Index</s:String>
+    <s:String x:Key="SavePlaylistInfo">Playlist-Info speichern</s:String>
+    <s:String x:Key="PlaylistInfoSavedSuccess">Playlist-Info wurde erfolgreich in {0} gespeichert</s:String>
+    <s:String x:Key="Success">Erfolg</s:String>
 </ResourceDictionary> 
