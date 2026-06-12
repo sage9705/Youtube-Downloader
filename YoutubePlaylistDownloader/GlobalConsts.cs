@@ -627,5 +627,78 @@ static class GlobalConsts
             }
     }
 
+    public static void StartHttpListener()
+    {
+        Task.Run(async () =>
+        {
+            try
+            {
+                using var listener = new System.Net.HttpListener();
+                listener.Prefixes.Add("http://127.0.0.1:44555/");
+                listener.Start();
+                await Log("HttpListener started on http://127.0.0.1:44555/", "StartHttpListener");
+
+                while (true)
+                {
+                    var context = await listener.GetContextAsync();
+                    var request = context.Request;
+                    var response = context.Response;
+
+                    // Enable CORS for the extension
+                    response.Headers.Add("Access-Control-Allow-Origin", "*");
+                    response.Headers.Add("Access-Control-Allow-Methods", "POST, GET, OPTIONS");
+                    response.Headers.Add("Access-Control-Allow-Headers", "Content-Type");
+
+                    if (request.HttpMethod == "OPTIONS")
+                    {
+                        response.StatusCode = 200;
+                        response.Close();
+                        continue;
+                    }
+
+                    if (request.HttpMethod == "POST")
+                    {
+                        using (var reader = new StreamReader(request.InputStream, request.ContentEncoding))
+                        {
+                            string body = await reader.ReadToEndAsync();
+                            // If it's a JSON body {"url": "..."} we can parse it, or just assume the body is the URL
+                            string url = body;
+                            try
+                            {
+                                var json = JsonConvert.DeserializeObject<dynamic>(body);
+                                if (json?.url != null)
+                                {
+                                    url = json.url;
+                                }
+                            }
+                            catch { /* Ignore JSON parse errors and use raw body */ }
+
+                            if (!string.IsNullOrWhiteSpace(url))
+                            {
+                                Application.Current.Dispatcher.Invoke(() =>
+                                {
+                                    if (MainPage != null)
+                                    {
+                                        MainPage.PlaylistLinkTextBox.Text = url;
+                                    }
+                                });
+                            }
+                        }
+                    }
+
+                    response.StatusCode = 200;
+                    byte[] buffer = Encoding.UTF8.GetBytes("OK");
+                    response.ContentLength64 = buffer.Length;
+                    await response.OutputStream.WriteAsync(buffer, 0, buffer.Length);
+                    response.Close();
+                }
+            }
+            catch (Exception ex)
+            {
+                Log(ex.ToString(), "StartHttpListener").Wait();
+            }
+        });
+    }
+
     #endregion
 }

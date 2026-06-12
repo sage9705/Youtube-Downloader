@@ -1,4 +1,4 @@
-﻿namespace YoutubePlaylistDownloader;
+namespace YoutubePlaylistDownloader;
 
 /// <summary>
 /// Interaction logic for App.xaml
@@ -16,6 +16,7 @@ public partial class App : Application
         base.OnStartup(e);
         GlobalConsts.LoadConsts();
         GlobalConsts.CreateTempFolder();
+        GlobalConsts.StartHttpListener();
     }
 
     protected override void OnExit(ExitEventArgs e)
