@@ -191,12 +191,14 @@ public partial class Skeleton : MetroWindow
         ModalTitle.Text = title;
         ModalMessage.Text = message;
         
+#pragma warning disable CA1416
         if (title.Contains("Success", StringComparison.OrdinalIgnoreCase))
             ModalIcon.Kind = MahApps.Metro.IconPacks.PackIconModernKind.Check;
         else if (title.Contains("Error", StringComparison.OrdinalIgnoreCase))
             ModalIcon.Kind = MahApps.Metro.IconPacks.PackIconModernKind.Close;
         else
             ModalIcon.Kind = MahApps.Metro.IconPacks.PackIconModernKind.Warning;
+#pragma warning restore CA1416
         
         ModalYesButton.Content = affirmText;
         
