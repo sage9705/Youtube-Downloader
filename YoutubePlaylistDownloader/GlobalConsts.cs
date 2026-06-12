@@ -33,7 +33,7 @@ static class GlobalConsts
     {
         get
         {
-            downloadSettings ??= new DownloadSettings("mp3", false, YoutubeHelpers.High720, false, false, false, false, "192", false, "en", false, false, 0, 0, false, true, false, true, 4, "$title", false, "mkv", "default", false);
+            downloadSettings ??= new DownloadSettings("mp3", false, YoutubeHelpers.High720, false, false, false, false, "192", false, "en", false, false, false, 0, 0, false, true, false, true, 4, "$title", false, "mkv", "default", false);
             return downloadSettings;
         }
         set
@@ -192,7 +192,7 @@ static class GlobalConsts
     {
         Log("Restoring defaults", "RestoreDefaults at GlobalConsts").Wait();
         settings = new Objects.Settings("Dark", "Red", "English", Environment.GetFolderPath(Environment.SpecialFolder.MyVideos), false, false, true, TimeSpan.FromMinutes(1), true, 20, 2, true, true);
-        DownloadSettings = new DownloadSettings("mp3", false, YoutubeHelpers.High720, false, false, false, false, "192", false, "en", false, false, 0, 0, false, true, false, true, 4, "$title", false, "mkv", "default", false);
+        DownloadSettings = new DownloadSettings("mp3", false, YoutubeHelpers.High720, false, false, false, false, "192", false, "en", false, false, false, 0, 0, false, true, false, true, 4, "$title", false, "mkv", "default", false);
         SaveConsts();
     }
     public static void LoadConsts()
@@ -592,12 +592,12 @@ static class GlobalConsts
                 {
                     Log(ex2.ToString(), "Delete download settings file path").Wait();
                 }
-                downloadSettings = new DownloadSettings("mp3", false, YoutubeHelpers.High720, false, false, false, false, "192", false, "en", false, false, 0, 0, false, true, false, true, 4, "$title", false, "mkv", "default", false);
+                downloadSettings = new DownloadSettings("mp3", false, YoutubeHelpers.High720, false, false, false, false, "192", false, "en", false, false, false, 0, 0, false, true, false, true, 4, "$title", false, "mkv", "default", false);
             }
         }
         else
         {
-            downloadSettings = new DownloadSettings("mp3", false, YoutubeHelpers.High720, false, false, false, false, "192", false, "en", false, false, 0, 0, false, true, false, true, 4, "$title", false, "mkv", "default", false);
+            downloadSettings = new DownloadSettings("mp3", false, YoutubeHelpers.High720, false, false, false, false, "192", false, "en", false, false, false, 0, 0, false, true, false, true, 4, "$title", false, "mkv", "default", false);
         }
     }
 

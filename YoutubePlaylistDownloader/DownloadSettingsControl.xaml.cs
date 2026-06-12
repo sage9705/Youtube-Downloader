@@ -57,6 +57,7 @@ public partial class DownloadSettingsControl : UserControl
         PlaylistStartIndexTextBox.Text = settings.SubsetStartIndex.ToString();
         PlaylistEndIndexTextBox.Text = settings.SubsetEndIndex.ToString();
         OpenDestinationFolderCheckBox.IsChecked = settings.OpenDestinationFolderWhenDone;
+        DownloadThumbnailCheckBox.IsChecked = settings.DownloadThumbnail;
         TagAudioFileCheckBox.IsChecked = settings.TagAudioFile;
         FilterByLengthCheckBox.IsChecked = settings.FilterVideosByLength;
         var FilterByLengthShorterOrLongerDropDownItemSource = new[] { FindResource("Longer"), FindResource("Shorter") };
@@ -100,6 +101,8 @@ public partial class DownloadSettingsControl : UserControl
         PlaylistEndIndexTextBox.TextChanged += PlaylistEndIndexTextBox_TextChanged;
         OpenDestinationFolderCheckBox.Checked += OpenDestinationFolderCheckBox_Checked;
         OpenDestinationFolderCheckBox.Unchecked += OpenDestinationFolderCheckBox_Unchecked;
+        DownloadThumbnailCheckBox.Checked += DownloadThumbnailCheckBox_Checked;
+        DownloadThumbnailCheckBox.Unchecked += DownloadThumbnailCheckBox_Unchecked;
         TagAudioFileCheckBox.Checked += TagAudioFileCheckBox_Checked;
         TagAudioFileCheckBox.Unchecked += TagAudioFileCheckBox_Unchecked;
         FilterByLengthCheckBox.Checked += FilterByLengthCheckBox_Checked;
@@ -195,6 +198,24 @@ public partial class DownloadSettingsControl : UserControl
         if (GlobalConsts.settings.SaveDownloadOptions)
         {
             GlobalConsts.DownloadSettings.OpenDestinationFolderWhenDone = OpenDestinationFolderCheckBox.IsChecked.Value;
+            GlobalConsts.SaveDownloadSettings();
+        }
+    }
+
+    private void DownloadThumbnailCheckBox_Unchecked(object sender, RoutedEventArgs e)
+    {
+        if (GlobalConsts.settings.SaveDownloadOptions)
+        {
+            GlobalConsts.DownloadSettings.DownloadThumbnail = DownloadThumbnailCheckBox.IsChecked.Value;
+            GlobalConsts.SaveDownloadSettings();
+        }
+    }
+
+    private void DownloadThumbnailCheckBox_Checked(object sender, RoutedEventArgs e)
+    {
+        if (GlobalConsts.settings.SaveDownloadOptions)
+        {
+            GlobalConsts.DownloadSettings.DownloadThumbnail = DownloadThumbnailCheckBox.IsChecked.Value;
             GlobalConsts.SaveDownloadSettings();
         }
     }

@@ -41,6 +41,9 @@ public class DownloadSettings
     public string CaptionsLanguage { get; set; }
 
     [JsonProperty]
+    public bool DownloadThumbnail { get; set; }
+
+    [JsonProperty]
     public bool SavePlaylistsInDifferentDirectories { get; set; }
 
     [JsonProperty]
@@ -89,7 +92,7 @@ public class DownloadSettings
 
     public DownloadSettings(string saveFormat, bool audioOnly, VideoQuality quality, bool preferHighestFPS,
     bool preferQuality, bool convert, bool setBitrate, string bitrate, bool downloadCaptions, string captionsLanguage,
-    bool savePlaylistsInDifferentDirectories, bool subset, int subsetStartIndex, int subsetEndIndex, bool openDestinationFolderWhenDone,
+    bool downloadThumbnail, bool savePlaylistsInDifferentDirectories, bool subset, int subsetStartIndex, int subsetEndIndex, bool openDestinationFolderWhenDone,
     bool tagAudioFile, bool filterVideosByLength, bool filterMode, double filterByLengthValue, string filenamePattern, bool skipExisting,
     string videoSaveFormat, string videoLanguage, bool numberVideosByPlaylistIndex)
     {
@@ -103,6 +106,7 @@ public class DownloadSettings
         SetBitrate = setBitrate;
         DownloadCaptions = downloadCaptions;
         CaptionsLanguage = captionsLanguage;
+        DownloadThumbnail = downloadThumbnail;
         SavePlaylistsInDifferentDirectories = savePlaylistsInDifferentDirectories;
         Subset = subset;
         SubsetStartIndex = subsetStartIndex;
@@ -131,6 +135,7 @@ public class DownloadSettings
         SetBitrate = settings.SetBitrate;
         DownloadCaptions = settings.DownloadCaptions;
         CaptionsLanguage = settings.CaptionsLanguage;
+        DownloadThumbnail = settings.DownloadThumbnail;
         SavePlaylistsInDifferentDirectories = settings.SavePlaylistsInDifferentDirectories;
         Subset = settings.Subset;
         SubsetStartIndex = settings.SubsetStartIndex;

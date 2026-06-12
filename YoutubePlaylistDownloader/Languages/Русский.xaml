@@ -192,4 +192,5 @@ $playlist: Название плейлиста
     <s:String x:Key="SavePlaylistInfo">Сохранить информацию о плейлисте</s:String>
     <s:String x:Key="PlaylistInfoSavedSuccess">Информация о плейлисте успешно сохранена в {0}</s:String>
     <s:String x:Key="Success">Успешно</s:String>
+    <s:String x:Key="DownloadThumbnail">Download high-resolution video thumbnail</s:String>
 </ResourceDictionary>

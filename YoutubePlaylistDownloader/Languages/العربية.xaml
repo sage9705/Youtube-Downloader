@@ -191,4 +191,5 @@ Please note that not all the parameters are always available (for example, when 
     <s:String x:Key="SavePlaylistInfo">حفظ معلومات قائمة التشغيل</s:String>
     <s:String x:Key="PlaylistInfoSavedSuccess">تم حفظ معلومات قائمة التشغيل بنجاح في {0}</s:String>
     <s:String x:Key="Success">نجاح</s:String>
+    <s:String x:Key="DownloadThumbnail">Download high-resolution video thumbnail</s:String>
 </ResourceDictionary> 

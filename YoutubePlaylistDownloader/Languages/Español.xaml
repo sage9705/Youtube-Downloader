@@ -188,4 +188,5 @@ Please note that not all the parameters are always available (for example, when 
     <s:String x:Key="SavePlaylistInfo">Guardar información de la lista de reproducción</s:String>
     <s:String x:Key="PlaylistInfoSavedSuccess">La información de la lista de reproducción se ha guardado correctamente en {0}</s:String>
     <s:String x:Key="Success">Éxito</s:String>
+    <s:String x:Key="DownloadThumbnail">Download high-resolution video thumbnail</s:String>
 </ResourceDictionary> 

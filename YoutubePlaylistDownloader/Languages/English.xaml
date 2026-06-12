@@ -193,4 +193,5 @@ Please note that not all the parameters are always available (for example, when 
     <s:String x:Key="SavePlaylistInfo">Save playlist info</s:String>
     <s:String x:Key="PlaylistInfoSavedSuccess">Playlist info has been successfully saved to {0}</s:String>
     <s:String x:Key="Success">Success</s:String>
+    <s:String x:Key="DownloadThumbnail">Download high-resolution video thumbnail</s:String>
 </ResourceDictionary> 

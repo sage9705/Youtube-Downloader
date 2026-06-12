@@ -190,4 +190,5 @@ redémarrage du programme pour prendre effet)</s:String>
     <s:String x:Key="SavePlaylistInfo">Enregistrer les informations de la playlist</s:String>
     <s:String x:Key="PlaylistInfoSavedSuccess">Les informations de la playlist ont été enregistrées avec succès dans {0}</s:String>
     <s:String x:Key="Success">Succès</s:String>
+    <s:String x:Key="DownloadThumbnail">Download high-resolution video thumbnail</s:String>
 </ResourceDictionary> 

@@ -480,6 +480,29 @@ public partial class DownloadPage : UserControl, IDisposable, IDownload
                         }
                         sw.Stop();
                     }
+                    
+                    if (downloadSettings.DownloadThumbnail)
+                    {
+                        var maxResThumbnail = video.Thumbnails?.GetWithHighestResolution();
+                        if (maxResThumbnail != null)
+                        {
+                            string thumbUrl = maxResThumbnail.Url;
+                            string thumbExt = ".jpg";
+                            string thumbLoc = $"{SavePath}\\{cleanFileName}{thumbExt}";
+                            using (var httpClient = new HttpClient())
+                            {
+                                var response = await httpClient.GetAsync(thumbUrl, token);
+                                if (response.IsSuccessStatusCode)
+                                {
+                                    using (var fs = new FileStream(thumbLoc, FileMode.Create))
+                                    {
+                                        await response.Content.CopyToAsync(fs, token);
+                                    }
+                                }
+                            }
+                        }
+                    }
+
                     if (!AudioOnly)
                     {
                         var ffmpeg = new Process()
@@ -875,6 +898,28 @@ public partial class DownloadPage : UserControl, IDisposable, IDownload
                             ffmpegArguments = $"-i \"{fileLoc}\" -i \"{audioLoc}\" -y -c copy \"{outputFileLoc}\"";
                             await ExtensionMethods.WhenAll(videoTask, audioTask);
                             sw.Stop();
+                        }
+                    }
+                }
+
+                if (GlobalConsts.DownloadSettings.DownloadThumbnail)
+                {
+                    var maxResThumbnail = video.Thumbnails?.GetWithHighestResolution();
+                    if (maxResThumbnail != null)
+                    {
+                        string thumbUrl = maxResThumbnail.Url;
+                        string thumbExt = ".jpg";
+                        string thumbLoc = $"{SavePath}\\{cleanVideoName}{thumbExt}";
+                        using (var httpClient = new HttpClient())
+                        {
+                            var response = await httpClient.GetAsync(thumbUrl, token);
+                            if (response.IsSuccessStatusCode)
+                            {
+                                using (var fs = new FileStream(thumbLoc, FileMode.Create))
+                                {
+                                    await response.Content.CopyToAsync(fs, token);
+                                }
+                            }
                         }
                     }
                 }

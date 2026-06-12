@@ -194,4 +194,5 @@ $playlist: 播放列表的名称
     <s:String x:Key="SavePlaylistInfo">保存播放列表信息</s:String>
     <s:String x:Key="PlaylistInfoSavedSuccess">播放列表信息已成功保存至 {0}</s:String>
     <s:String x:Key="Success">成功</s:String>
+    <s:String x:Key="DownloadThumbnail">Download high-resolution video thumbnail</s:String>
 </ResourceDictionary> 

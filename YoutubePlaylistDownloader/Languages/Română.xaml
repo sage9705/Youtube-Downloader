@@ -186,4 +186,5 @@ Puteți adăuga orice text între parametri, doar parametrii vor fi înlocuiți.
     <s:String x:Key="SavePlaylistInfo">Salvează informațiile playlistului</s:String>
     <s:String x:Key="PlaylistInfoSavedSuccess">Informațiile playlistului au fost salvate cu succes în {0}</s:String>
     <s:String x:Key="Success">Succes</s:String>
+    <s:String x:Key="DownloadThumbnail">Download high-resolution video thumbnail</s:String>
 </ResourceDictionary> 
