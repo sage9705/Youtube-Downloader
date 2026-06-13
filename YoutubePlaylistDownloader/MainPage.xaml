@@ -124,7 +124,7 @@
                                                 <ComboBox SelectedValue="{Binding SelectedVideoQuality, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                                                           SelectedValuePath="Tag" MinWidth="90" Margin="2"
                                                           x:Name="QualityCombo">
-                                                    <ComboBoxItem Tag="" Content="{DynamicResource Global}" IsSelected="True" />
+                                                    <ComboBoxItem Tag="" Content="{DynamicResource Global}" />
                                                     <ComboBoxItem Tag="144p" Content="144p" />
                                                     <ComboBoxItem Tag="240p" Content="240p" />
                                                     <ComboBoxItem Tag="360p" Content="360p" />
@@ -149,7 +149,7 @@
                                                 <ComboBox SelectedValue="{Binding SelectedAudioBitrate, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                                                           SelectedValuePath="Tag" MinWidth="80" Margin="2"
                                                           x:Name="BitrateCombo">
-                                                    <ComboBoxItem Tag="" Content="{DynamicResource Global}" IsSelected="True" />
+                                                    <ComboBoxItem Tag="" Content="{DynamicResource Global}" />
                                                     <ComboBoxItem Tag="128" Content="128 kbps" />
                                                     <ComboBoxItem Tag="192" Content="192 kbps" />
                                                     <ComboBoxItem Tag="256" Content="256 kbps" />

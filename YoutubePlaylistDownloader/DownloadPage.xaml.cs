@@ -220,7 +220,7 @@ public partial class DownloadPage : UserControl, IDisposable, IDownload
                     var overrideBitrate = hasBitrateOverride
                         ? $"-b:a {sv.SelectedAudioBitrate}k"
                         : Bitrate;
-                    perVideoOverrides[sv.Video.Id] = (overrideQuality, overrideBitrate);
+                    perVideoOverrides[sv.Video.Id.Value] = (overrideQuality, overrideBitrate);
                 }
             }
         }
@@ -382,7 +382,7 @@ public partial class DownloadPage : UserControl, IDisposable, IDownload
 
                     if (!AudioOnly)
                     {
-                        var effectiveQuality = perVideoOverrides.TryGetValue(video.Id, out var convertOverride)
+                        var effectiveQuality = perVideoOverrides.TryGetValue(video.Id.Value, out var convertOverride)
                             ? convertOverride.Quality
                             : Quality;
                         var videoList = streamInfoSet.GetVideoOnlyStreams()
@@ -528,7 +528,7 @@ public partial class DownloadPage : UserControl, IDisposable, IDownload
 
                     if (!AudioOnly)
                     {
-                        var effectiveBitrate = perVideoOverrides.TryGetValue(video.Id, out var convertBitrateOverride)
+                        var effectiveBitrate = perVideoOverrides.TryGetValue(video.Id.Value, out var convertBitrateOverride)
                             ? convertBitrateOverride.Bitrate
                             : Bitrate;
                         var ffmpeg = new Process()
@@ -760,7 +760,7 @@ public partial class DownloadPage : UserControl, IDisposable, IDownload
                 IVideoStreamInfo bestQuality = null;
                 IStreamInfo bestAudio = null;
 
-                var effectiveQuality = perVideoOverrides.TryGetValue(video.Id, out var dlOverride)
+                var effectiveQuality = perVideoOverrides.TryGetValue(video.Id.Value, out var dlOverride)
                     ? dlOverride.Quality
                     : Quality;
                 var videoList = streamInfoSet.GetVideoOnlyStreams()
