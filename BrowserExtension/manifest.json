@@ -1,0 +1,24 @@
+{
+  "manifest_version": 3,
+  "name": "YTP Downloader Companion",
+  "version": "1.0",
+  "description": "Send YouTube videos directly to your local Youtube Playlist Downloader application.",
+  "permissions": [
+    "activeTab",
+    "scripting"
+  ],
+  "host_permissions": [
+    "*://*.youtube.com/*",
+    "http://127.0.0.1:44555/*"
+  ],
+  "content_scripts": [
+    {
+      "matches": ["*://*.youtube.com/*"],
+      "js": ["content.js"],
+      "run_at": "document_end"
+    }
+  ],
+  "action": {
+    "default_title": "Send to YTP Downloader"
+  }
+}
