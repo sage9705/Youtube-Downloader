@@ -3,12 +3,16 @@ namespace YoutubePlaylistDownloader.Objects;
 public class SelectableVideo : INotifyPropertyChanged
 {
     private bool isSelected;
+    private string selectedVideoQuality;
+    private string selectedAudioBitrate;
 
     public SelectableVideo(IVideo video, int index)
     {
         Video = video;
         Index = index;
         isSelected = true;
+        selectedVideoQuality = string.Empty;
+        selectedAudioBitrate = string.Empty;
     }
 
     public IVideo Video { get; }
@@ -28,6 +32,32 @@ public class SelectableVideo : INotifyPropertyChanged
             {
                 isSelected = value;
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsSelected)));
+            }
+        }
+    }
+
+    public string SelectedVideoQuality
+    {
+        get => selectedVideoQuality;
+        set
+        {
+            if (selectedVideoQuality != value)
+            {
+                selectedVideoQuality = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(SelectedVideoQuality)));
+            }
+        }
+    }
+
+    public string SelectedAudioBitrate
+    {
+        get => selectedAudioBitrate;
+        set
+        {
+            if (selectedAudioBitrate != value)
+            {
+                selectedAudioBitrate = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(SelectedAudioBitrate)));
             }
         }
     }
