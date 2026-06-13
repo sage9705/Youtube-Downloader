@@ -194,5 +194,8 @@ Please note that not all the parameters are always available (for example, when 
     <s:String x:Key="PlaylistInfoSavedSuccess">Playlist info has been successfully saved to {0}</s:String>
     <s:String x:Key="Success">Success</s:String>
     <s:String x:Key="DownloadThumbnail">Download high-resolution video thumbnail</s:String>
+    <s:String x:Key="Quality">Quality</s:String>
+    <s:String x:Key="AudioBitrate">Audio kbps</s:String>
+    <s:String x:Key="Global">Global</s:String>
     <s:String x:Key="MiniPlayer">Mini Player</s:String>
 </ResourceDictionary> 
