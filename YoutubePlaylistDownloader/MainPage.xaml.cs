@@ -187,12 +187,12 @@ public partial class MainPage : UserControl
         UpdateSelectionCount();
     }
 
-    private IEnumerable<IVideo> GetSelectedVideos()
+    private List<SelectableVideo> GetSelectedSelectableVideos()
     {
         if (selectableVideos.Count == 0)
-            return VideoList;
+            return VideoList.Select((v, i) => new SelectableVideo(v, i + 1)).ToList();
 
-        return selectableVideos.Where(v => v.IsSelected).Select(v => v.Video);
+        return selectableVideos.Where(v => v.IsSelected).ToList();
     }
 
     private void DownloadButton_Click(object sender, RoutedEventArgs e)
@@ -205,14 +205,14 @@ public partial class MainPage : UserControl
                 return;
             }
 
-            var selectedVideos = GetSelectedVideos().ToList();
-            if (!selectedVideos.Any())
+            var selected = GetSelectedSelectableVideos();
+            if (!selected.Any())
             {
                 GlobalConsts.ShowMessage((string)FindResource("Error"), (string)FindResource("NoVideosSelected")).ConfigureAwait(false);
                 return;
             }
 
-            GlobalConsts.LoadPage(new DownloadPage(list, GlobalConsts.DownloadSettings.Clone(), videos: selectedVideos));
+            GlobalConsts.LoadPage(new DownloadPage(list, GlobalConsts.DownloadSettings.Clone(), videos: selected.Select(s => s.Video), selectableVideos: selected));
             VideoList = new List<IVideo>();
             PlaylistLinkTextBox.Text = string.Empty;
         }
@@ -262,14 +262,14 @@ public partial class MainPage : UserControl
                 return;
             }
 
-            var selectedVideos = GetSelectedVideos().ToList();
-            if (!selectedVideos.Any())
+            var selected = GetSelectedSelectableVideos();
+            if (!selected.Any())
             {
                 GlobalConsts.ShowMessage((string)FindResource("Error"), (string)FindResource("NoVideosSelected")).ConfigureAwait(false);
                 return;
             }
 
-            _ = new DownloadPage(list, GlobalConsts.DownloadSettings.Clone(), silent: true, videos: selectedVideos);
+            _ = new DownloadPage(list, GlobalConsts.DownloadSettings.Clone(), silent: true, videos: selected.Select(s => s.Video), selectableVideos: selected);
             VideoList = new List<IVideo>();
             PlaylistLinkTextBox.Text = string.Empty;
         }
@@ -279,7 +279,7 @@ public partial class MainPage : UserControl
     {
         if (list != null || VideoList.Any())
         {
-            var selectedVideos = GetSelectedVideos().ToList();
+            var selectedVideos = GetSelectedSelectableVideos().Select(s => s.Video).ToList();
             if (!selectedVideos.Any())
             {
                 await GlobalConsts.ShowMessage((string)FindResource("Error"), (string)FindResource("NoVideosSelected")).ConfigureAwait(false);
