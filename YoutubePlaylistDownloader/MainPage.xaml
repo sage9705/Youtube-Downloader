@@ -115,6 +115,49 @@
                                             <TextBlock Text="{DynamicResource Channel}" />
                                         </DataGridTextColumn.Header>
                                     </DataGridTextColumn>
+                                    <DataGridTemplateColumn Width="110">
+                                        <DataGridTemplateColumn.Header>
+                                            <TextBlock Text="{DynamicResource Quality}" />
+                                        </DataGridTemplateColumn.Header>
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <ComboBox SelectedValue="{Binding SelectedVideoQuality, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                                                          SelectedValuePath="Tag" MinWidth="90" Margin="2"
+                                                          x:Name="QualityCombo">
+                                                    <ComboBoxItem Tag="" Content="{DynamicResource Global}" IsSelected="True" />
+                                                    <ComboBoxItem Tag="144p" Content="144p" />
+                                                    <ComboBoxItem Tag="240p" Content="240p" />
+                                                    <ComboBoxItem Tag="360p" Content="360p" />
+                                                    <ComboBoxItem Tag="480p" Content="480p" />
+                                                    <ComboBoxItem Tag="720p" Content="720p" />
+                                                    <ComboBoxItem Tag="1080p" Content="1080p" />
+                                                    <ComboBoxItem Tag="1440p" Content="1440p" />
+                                                    <ComboBoxItem Tag="2160p" Content="2160p (4K)" />
+                                                    <ComboBoxItem Tag="2880p" Content="2880p" />
+                                                    <ComboBoxItem Tag="3072p" Content="3072p" />
+                                                    <ComboBoxItem Tag="4320p" Content="4320p (8K)" />
+                                                </ComboBox>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+                                    <DataGridTemplateColumn Width="100">
+                                        <DataGridTemplateColumn.Header>
+                                            <TextBlock Text="{DynamicResource AudioBitrate}" />
+                                        </DataGridTemplateColumn.Header>
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <ComboBox SelectedValue="{Binding SelectedAudioBitrate, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                                                          SelectedValuePath="Tag" MinWidth="80" Margin="2"
+                                                          x:Name="BitrateCombo">
+                                                    <ComboBoxItem Tag="" Content="{DynamicResource Global}" IsSelected="True" />
+                                                    <ComboBoxItem Tag="128" Content="128 kbps" />
+                                                    <ComboBoxItem Tag="192" Content="192 kbps" />
+                                                    <ComboBoxItem Tag="256" Content="256 kbps" />
+                                                    <ComboBoxItem Tag="320" Content="320 kbps" />
+                                                </ComboBox>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
                                 </DataGrid.Columns>
                             </DataGrid>
 
