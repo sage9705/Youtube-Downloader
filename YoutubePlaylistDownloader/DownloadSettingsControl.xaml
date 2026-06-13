@@ -72,6 +72,7 @@
                             <Label Content="kbps" Margin="7" />
                         </StackPanel>
                         <CheckBox Margin="7" x:Name="TagAudioFileCheckBox" Content="{DynamicResource TagAudioFile}" />
+                        <CheckBox Margin="7" x:Name="EmbedThumbnailAsArtworkCheckBox" Content="{DynamicResource EmbedThumbnailAsArtwork}" IsEnabled="{Binding ElementName=TagAudioFileCheckBox, Path=IsChecked}" />
                         <CheckBox Margin="7" x:Name="AudioOnlyCheckBox" Content="{DynamicResource AudioOnly}" />
                     </StackPanel>
                 </Border>

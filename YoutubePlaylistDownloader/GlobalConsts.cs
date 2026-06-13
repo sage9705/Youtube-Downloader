@@ -406,21 +406,24 @@ static class GlobalConsts
             tagLibFile.Tag.Album = album;
             tagLibFile.Tag.Track = (uint)vIndex;
 
-            try
+            if (DownloadSettings.EmbedThumbnailAsArtwork)
             {
-                var picturePath = $"{TempFolderPath}{CleanFileName(fullVideo.Title)}.jpg";
-
-                using (var httpClient = new HttpClient())
+                try
                 {
-                    var pictureContent = await httpClient.GetByteArrayAsync($"https://img.youtube.com/vi/{fullVideo.Id}/maxresdefault.jpg").ConfigureAwait(false);
-                    CropAndSaveImage(pictureContent, picturePath);
-                }
+                    var picturePath = $"{TempFolderPath}{CleanFileName(fullVideo.Title)}.jpg";
 
-                tagLibFile.Tag.Pictures = [new TagLib.Picture(picturePath)];
-            }
-            catch (Exception ex)
-            {
-                await Log("Failed to add picture to file at TagMusicFile", ex.ToString()).ConfigureAwait(false);
+                    using (var httpClient = new HttpClient())
+                    {
+                        var pictureContent = await httpClient.GetByteArrayAsync($"https://img.youtube.com/vi/{fullVideo.Id}/maxresdefault.jpg").ConfigureAwait(false);
+                        CropAndSaveImage(pictureContent, picturePath);
+                    }
+
+                    tagLibFile.Tag.Pictures = [new TagLib.Picture(picturePath)];
+                }
+                catch (Exception ex)
+                {
+                    await Log("Failed to add picture to file at TagMusicFile", ex.ToString()).ConfigureAwait(false);
+                }
             }
 
             tagLibFile.Save();
@@ -477,25 +480,28 @@ static class GlobalConsts
                 tagLibFile.Tag.Performers = songPerformers;
             }
 
-            try
+            if (DownloadSettings.EmbedThumbnailAsArtwork)
             {
-                var picturePath = $"{TempFolderPath}{CleanFileName(video.Title)}.jpg";
-
-                using (var httpClient = new HttpClient())
+                try
                 {
-                    var response = await httpClient.GetAsync($"https://img.youtube.com/vi/{video.Id}/maxresdefault.jpg").ConfigureAwait(false);
+                    var picturePath = $"{TempFolderPath}{CleanFileName(video.Title)}.jpg";
 
-                    using (var pictureStream = File.Create(picturePath))
+                    using (var httpClient = new HttpClient())
                     {
-                        await response.Content.CopyToAsync(pictureStream).ConfigureAwait(false);
-                    }
-                }
+                        var response = await httpClient.GetAsync($"https://img.youtube.com/vi/{video.Id}/maxresdefault.jpg").ConfigureAwait(false);
 
-                tagLibFile.Tag.Pictures = [new TagLib.Picture(picturePath)];
-            }
-            catch (Exception ex)
-            {
-                await Log("Failed to add picture to file at TagFileBasedOnTitle", ex.ToString()).ConfigureAwait(false);
+                        using (var pictureStream = File.Create(picturePath))
+                        {
+                            await response.Content.CopyToAsync(pictureStream).ConfigureAwait(false);
+                        }
+                    }
+
+                    tagLibFile.Tag.Pictures = [new TagLib.Picture(picturePath)];
+                }
+                catch (Exception ex)
+                {
+                    await Log("Failed to add picture to file at TagFileBasedOnTitle", ex.ToString()).ConfigureAwait(false);
+                }
             }
 
             tagLibFile.Save();

@@ -63,12 +63,14 @@ public class DownloadSettings
     public bool TagAudioFile { get; set; }
 
     [JsonProperty(DefaultValueHandling = DefaultValueHandling.Populate)]
-    [DefaultValue(false)]
-    public bool FilterVideosByLength { get; set; }
+    [DefaultValue(true)]
+    public bool EmbedThumbnailAsArtwork { get; set; } = true;
 
     [JsonProperty(DefaultValueHandling = DefaultValueHandling.Populate)]
     [DefaultValue(false)]
-    // true = longer than, false = shorter than
+    public bool FilterVideosByLength { get; set; }
+    [JsonProperty(DefaultValueHandling = DefaultValueHandling.Populate)]
+    [DefaultValue(false)]
     public bool FilterMode { get; set; }
 
     [JsonProperty(DefaultValueHandling = DefaultValueHandling.Populate)]
@@ -94,7 +96,7 @@ public class DownloadSettings
     bool preferQuality, bool convert, bool setBitrate, string bitrate, bool downloadCaptions, string captionsLanguage,
     bool downloadThumbnail, bool savePlaylistsInDifferentDirectories, bool subset, int subsetStartIndex, int subsetEndIndex, bool openDestinationFolderWhenDone,
     bool tagAudioFile, bool filterVideosByLength, bool filterMode, double filterByLengthValue, string filenamePattern, bool skipExisting,
-    string videoSaveFormat, string videoLanguage, bool numberVideosByPlaylistIndex)
+    string videoSaveFormat, string videoLanguage, bool numberVideosByPlaylistIndex, bool embedThumbnailAsArtwork = true)
     {
         SaveFormat = saveFormat;
         AudioOnly = audioOnly;
@@ -121,6 +123,7 @@ public class DownloadSettings
         VideoSaveFormat = videoSaveFormat;
         VideoLanguage = videoLanguage;
         NumberVideosByPlaylistIndex = numberVideosByPlaylistIndex;
+        EmbedThumbnailAsArtwork = embedThumbnailAsArtwork;
     }
 
     public DownloadSettings(DownloadSettings settings)
@@ -150,6 +153,7 @@ public class DownloadSettings
         VideoSaveFormat = settings.VideoSaveFormat;
         VideoLanguage = settings.VideoLanguage;
         NumberVideosByPlaylistIndex = settings.NumberVideosByPlaylistIndex;
+        EmbedThumbnailAsArtwork = settings.EmbedThumbnailAsArtwork;
     }
 
     public string GetFilenameByPattern(IVideo video, int index, string file, FullPlaylist playlist = null)
