@@ -6,7 +6,10 @@
              xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" 
-             FlowDirection="{DynamicResource FlowDirection}">
+             FlowDirection="{DynamicResource FlowDirection}"
+             TextOptions.TextFormattingMode="Display"
+             TextOptions.TextRenderingMode="ClearType"
+             UseLayoutRounding="True">
 
     <UserControl.Triggers>
         <EventTrigger RoutedEvent="UserControl.Loaded">
@@ -66,7 +69,7 @@
 
             </Controls:MetroTabItem>
         </Controls:MetroAnimatedTabControl>
-        <Controls:Tile Click="Exit_Click" HorizontalAlignment="Center" Title="{DynamicResource SaveAndBackToDownload}" Margin="5" MinWidth="280" Width="Auto" HorizontalTitleAlignment="Center" Controls:ControlsHelper.MouseOverBorderBrush="{DynamicResource BlackBrush}" Style="{StaticResource LargeTileStyle}">
+        <Controls:Tile Click="Exit_Click" HorizontalAlignment="Center" Title="{DynamicResource SaveAndBackToDownload}" Margin="15,20,15,10" MinWidth="280" Width="Auto" HorizontalTitleAlignment="Center" Controls:ControlsHelper.MouseOverBorderBrush="{DynamicResource BlackBrush}" Style="{StaticResource LargeTileStyle}">
             <iconPacks:PackIconModern Width="40" Height="40" Kind="ArrowLeft" />
         </Controls:Tile>
     </StackPanel>

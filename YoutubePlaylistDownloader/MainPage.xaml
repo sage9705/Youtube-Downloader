@@ -4,7 +4,10 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:Controls="http://metro.mahapps.com/winfx/xaml/controls"
              Margin="10"
-             FlowDirection="{DynamicResource FlowDirection}">
+             FlowDirection="{DynamicResource FlowDirection}"
+             TextOptions.TextFormattingMode="Display"
+             TextOptions.TextRenderingMode="ClearType"
+             UseLayoutRounding="True">
 
     <Grid>
         <Grid.RowDefinitions>
@@ -20,15 +23,15 @@
                         <RowDefinition Height="Auto" />
                         <RowDefinition />
                     </Grid.RowDefinitions>
-                    <Grid Grid.Row="0" x:Name="HeadlineStackPanel" HorizontalAlignment="Stretch" >
+                    <Grid Grid.Row="0" x:Name="HeadlineStackPanel" HorizontalAlignment="Stretch" Margin="5,5,5,15" >
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition/>
                         </Grid.ColumnDefinitions>
-                        <Controls:Tile Grid.Column="0" Click="Tile_Click" Style="{StaticResource RoundAccentIconButton}" Margin="0,0,10,0" ToolTip="{DynamicResource Options}" VerticalAlignment="Center">
+                        <Controls:Tile Grid.Column="0" Click="Tile_Click" Style="{StaticResource RoundAccentIconButton}" Margin="0,0,12,0" ToolTip="{DynamicResource Options}" VerticalAlignment="Center">
                             <iconPacks:PackIconModern Kind="Cog" Width="20" Height="20" />
                         </Controls:Tile>
-                        <TextBox Grid.Column="1" HorizontalAlignment="Stretch"  x:Name="PlaylistLinkTextBox" Margin="5" FontSize="18" TextChanged="TextBox_TextChanged" Style="{StaticResource SeachBarPlaceHolder}" Tag="{DynamicResource InsertYoutubePlaylistLinkHere}"  />
+                        <TextBox Grid.Column="1" HorizontalAlignment="Stretch"  x:Name="PlaylistLinkTextBox" Margin="0,5" FontSize="18" TextChanged="TextBox_TextChanged" Style="{StaticResource SeachBarPlaceHolder}" Tag="{DynamicResource InsertYoutubePlaylistLinkHere}"  />
                     </Grid>
                     <ScrollViewer Grid.Row="1" x:Name="GridScrollViewer" VerticalScrollBarVisibility="Auto">
                         <Grid>
@@ -38,10 +41,8 @@
                                 <RowDefinition Height="Auto"/>
                                 <RowDefinition Height="Auto"/>
                             </Grid.RowDefinitions>
-                            <Border Grid.Row="0" Visibility="Collapsed" x:Name="PlaylistInfoGrid" Margin="7,10" 
-                                    Background="{DynamicResource MahApps.Brushes.Control.Background}" 
-                                    BorderBrush="{DynamicResource MahApps.Brushes.Control.Border}"
-                                    BorderThickness="1" CornerRadius="12" Padding="15" HorizontalAlignment="Stretch" Width="Auto">
+                            <Border Grid.Row="0" Visibility="Collapsed" x:Name="PlaylistInfoGrid" Margin="7,10,7,20" 
+                                    Style="{StaticResource SectionCard}" HorizontalAlignment="Stretch" Width="Auto">
                                 <Grid>
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="Auto"/>
@@ -52,14 +53,19 @@
 
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="Auto"/>
-                                        <ColumnDefinition Width="Auto" MinWidth="120"/>
+                                        <ColumnDefinition Width="Auto" MinWidth="140"/>
                                         <ColumnDefinition Width="*"/>
                                     </Grid.ColumnDefinitions>
 
                                     <!-- Col 0: Thumbnail with rounded corners -->
-                                    <Border Grid.Column="0" Grid.Row="0" Grid.RowSpan="4" CornerRadius="8" ClipToBounds="True" Margin="0,0,20,0" MaxWidth="320" MaxHeight="180">
-                                        <Image x:Name="PlaylistInfoImage" Stretch="UniformToFill" />
-                                    </Border>
+                                    <Grid Grid.Column="0" Grid.Row="0" Grid.RowSpan="4" Margin="0,0,24,0" MaxWidth="320" MaxHeight="180">
+                                        <Grid.Effect>
+                                            <DropShadowEffect BlurRadius="12" ShadowDepth="2" Opacity="0.15" Color="Black" />
+                                        </Grid.Effect>
+                                        <Border CornerRadius="8" ClipToBounds="True">
+                                            <Image x:Name="PlaylistInfoImage" Stretch="UniformToFill" />
+                                        </Border>
+                                    </Grid>
 
                                     <!-- Col 1 Labels: bold and clean -->
                                     <TextBlock Text="{DynamicResource PlaylistTitle}" Grid.Row="0" Grid.Column="1" FontSize="14" FontWeight="SemiBold" Margin="0,5" Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}" />
@@ -162,9 +168,9 @@
                             </DataGrid>
 
                             <TextBlock Grid.Row="2" x:Name="SelectionCountTextBlock" Visibility="Collapsed"
-                                       HorizontalAlignment="Center" Margin="0,2" FontSize="13" />
+                                       HorizontalAlignment="Center" Margin="0,5,0,10" FontSize="14" FontWeight="Medium" />
 
-                            <WrapPanel Grid.Row="3" HorizontalAlignment="Center">
+                            <WrapPanel Grid.Row="3" HorizontalAlignment="Center" Margin="0,15,0,10">
                                 <Controls:Tile Style="{DynamicResource SmallTileStyle}" x:Name="DownloadButton" Title="{DynamicResource Download}" IsEnabled="False" MinWidth="200" Width="Auto" HorizontalTitleAlignment="Center" Click="DownloadButton_Click">
                                     <iconPacks:PackIconModern Width="40" Height="40" Kind="ArrowDown" />
                                 </Controls:Tile>
@@ -198,7 +204,7 @@
                     <ScrollViewer Grid.Row="0" x:Name="BulkScrollViewer" VerticalScrollBarVisibility="Auto" >
                         <TextBox x:Name="BulkLinksTextBox" AcceptsReturn="True" TextWrapping="Wrap" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto" TextChanged="TextBox_TextChanged_1" FontSize="16" PreviewDrop="BulkLinksTextBox_PreviewDrop"  />
                     </ScrollViewer>
-                    <WrapPanel Grid.Row="1" HorizontalAlignment="Center">
+                    <WrapPanel Grid.Row="1" HorizontalAlignment="Center" Margin="0,15,0,10">
                         <Controls:Tile Style="{DynamicResource SmallTileStyle}" x:Name="BulkDownloadButton" Title="{DynamicResource Download}" MinWidth="200" Width="Auto" HorizontalTitleAlignment="Center" IsEnabled="False" Click="BulkDownloadButton_Click">
                             <iconPacks:PackIconModern Width="40" Height="40" Kind="ArrowDown" />
                         </Controls:Tile>

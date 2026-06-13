@@ -11,7 +11,7 @@
         <Setter Property="Foreground" Value="{DynamicResource MahApps.Brushes.ThemeForeground}" />
         <Setter Property="BorderBrush" Value="{DynamicResource MahApps.Brushes.Control.Border}" />
         <Setter Property="BorderThickness" Value="1.5" />
-        <Setter Property="Padding" Value="10,6" />
+        <Setter Property="Padding" Value="10,7" />
         <Setter Property="FontSize" Value="14" />
         <Setter Property="SelectionBrush" Value="{DynamicResource MahApps.Brushes.Accent}" />
         <Setter Property="Template">
@@ -21,15 +21,15 @@
                             Background="{TemplateBinding Background}" 
                             BorderBrush="{TemplateBinding BorderBrush}" 
                             BorderThickness="{TemplateBinding BorderThickness}" 
-                            CornerRadius="6" 
+                            CornerRadius="8" 
                             SnapsToDevicePixels="True">
                         <Grid Margin="{TemplateBinding Padding}">
                             <ScrollViewer x:Name="PART_ContentHost" Focusable="false" 
-                                          HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden" 
-                                          VerticalAlignment="Center"/>
+                                           HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden" 
+                                           VerticalAlignment="Center"/>
                             <TextBlock x:Name="placeholder" Text="{TemplateBinding Tag}" 
-                                       Foreground="{TemplateBinding Foreground}" Opacity="0.4"
-                                       IsHitTestVisible="False" VerticalAlignment="Center" Visibility="Collapsed" />
+                                        Foreground="{TemplateBinding Foreground}" Opacity="0.4"
+                                        IsHitTestVisible="False" VerticalAlignment="Center" Visibility="Collapsed" />
                         </Grid>
                     </Border>
                     <ControlTemplate.Triggers>
@@ -45,8 +45,13 @@
                         </Trigger>
                         <Trigger Property="IsFocused" Value="true">
                             <Setter Property="BorderBrush" Value="{DynamicResource MahApps.Brushes.Accent}" />
-                            <Setter Property="BorderThickness" Value="2" />
+                            <Setter Property="BorderThickness" Value="1.5" />
                             <Setter Property="Background" Value="{DynamicResource MahApps.Brushes.ThemeBackground}" />
+                            <Setter TargetName="border" Property="Effect">
+                                <Setter.Value>
+                                    <DropShadowEffect BlurRadius="8" ShadowDepth="0" Opacity="0.15" Color="Black" />
+                                </Setter.Value>
+                            </Setter>
                         </Trigger>
                         <Trigger Property="IsEnabled" Value="false">
                             <Setter Property="Opacity" Value="0.5" />
@@ -63,7 +68,7 @@
         <Setter Property="Foreground" Value="{DynamicResource MahApps.Brushes.ThemeForeground}" />
         <Setter Property="BorderBrush" Value="{DynamicResource MahApps.Brushes.Control.Border}" />
         <Setter Property="BorderThickness" Value="1.5" />
-        <Setter Property="Padding" Value="14,10" />
+        <Setter Property="Padding" Value="16,12" />
         <Setter Property="FontSize" Value="16" />
         <Setter Property="SelectionBrush" Value="{DynamicResource MahApps.Brushes.Accent}" />
         <Setter Property="Template">
@@ -73,7 +78,7 @@
                             Background="{TemplateBinding Background}" 
                             BorderBrush="{TemplateBinding BorderBrush}" 
                             BorderThickness="{TemplateBinding BorderThickness}" 
-                            CornerRadius="20" 
+                            CornerRadius="22" 
                             SnapsToDevicePixels="True">
                         <Grid Margin="{TemplateBinding Padding}">
                             <Grid.ColumnDefinitions>
@@ -87,11 +92,11 @@
                                                       Margin="0,0,10,0" VerticalAlignment="Center" Grid.Column="0" />
                             
                             <ScrollViewer x:Name="PART_ContentHost" Grid.Column="1" Focusable="false" 
-                                          HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden" 
-                                          VerticalAlignment="Center"/>
+                                           HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden" 
+                                           VerticalAlignment="Center"/>
                             <TextBlock x:Name="placeholder" Grid.Column="1" Text="{TemplateBinding Tag}" 
-                                       Foreground="{TemplateBinding Foreground}" Opacity="0.4"
-                                       IsHitTestVisible="False" VerticalAlignment="Center" Visibility="Collapsed" />
+                                        Foreground="{TemplateBinding Foreground}" Opacity="0.4"
+                                        IsHitTestVisible="False" VerticalAlignment="Center" Visibility="Collapsed" />
                         </Grid>
                     </Border>
                     <ControlTemplate.Triggers>
@@ -107,8 +112,13 @@
                         </Trigger>
                         <Trigger Property="IsFocused" Value="true">
                             <Setter Property="BorderBrush" Value="{DynamicResource MahApps.Brushes.Accent}" />
-                            <Setter Property="BorderThickness" Value="2" />
+                            <Setter Property="BorderThickness" Value="1.5" />
                             <Setter Property="Background" Value="{DynamicResource MahApps.Brushes.ThemeBackground}" />
+                            <Setter TargetName="border" Property="Effect">
+                                <Setter.Value>
+                                    <DropShadowEffect BlurRadius="10" ShadowDepth="0" Opacity="0.15" Color="Black" />
+                                </Setter.Value>
+                            </Setter>
                         </Trigger>
                         <Trigger Property="IsEnabled" Value="false">
                             <Setter Property="Opacity" Value="0.5" />
@@ -135,29 +145,35 @@
                             Background="{TemplateBinding Background}" 
                             BorderBrush="{TemplateBinding BorderBrush}" 
                             BorderThickness="{TemplateBinding BorderThickness}" 
-                            CornerRadius="8"
+                            CornerRadius="10"
                             SnapsToDevicePixels="True">
-                        <Grid Margin="5">
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="*" />
-                                <RowDefinition Height="Auto" />
-                            </Grid.RowDefinitions>
-                            <!-- Content -->
-                            <ContentPresenter Grid.Row="0"
-                                              HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" 
-                                              VerticalAlignment="{TemplateBinding VerticalContentAlignment}" 
-                                              SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
-                            <!-- Title -->
-                            <TextBlock x:Name="TitleText"
-                                       Grid.Row="1" 
-                                       Text="{TemplateBinding Title}" 
-                                       FontSize="{TemplateBinding TitleFontSize}"
-                                       Foreground="{TemplateBinding Foreground}"
-                                       HorizontalAlignment="Center"
-                                       VerticalAlignment="Center"
-                                       Margin="0,4,0,0"
-                                       TextWrapping="Wrap"
-                                       TextAlignment="Center"/>
+                        <Border.Effect>
+                            <DropShadowEffect BlurRadius="8" ShadowDepth="1" Opacity="0.1" Color="Black"/>
+                        </Border.Effect>
+                        <Grid>
+                            <Border x:Name="HoverOverlay" Background="{DynamicResource MahApps.Brushes.Accent2}" Opacity="0" CornerRadius="10" />
+                            <Grid Margin="5">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="*" />
+                                    <RowDefinition Height="Auto" />
+                                </Grid.RowDefinitions>
+                                <!-- Content -->
+                                <ContentPresenter Grid.Row="0"
+                                                   HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" 
+                                                   VerticalAlignment="{TemplateBinding VerticalContentAlignment}" 
+                                                   SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                                <!-- Title -->
+                                <TextBlock x:Name="TitleText"
+                                           Grid.Row="1" 
+                                           Text="{TemplateBinding Title}" 
+                                           FontSize="{TemplateBinding TitleFontSize}"
+                                           Foreground="{TemplateBinding Foreground}"
+                                           HorizontalAlignment="Center"
+                                           VerticalAlignment="Center"
+                                           Margin="0,4,0,0"
+                                           TextWrapping="Wrap"
+                                           TextAlignment="Center"/>
+                            </Grid>
                         </Grid>
                     </Border>
                     <ControlTemplate.Triggers>
@@ -168,9 +184,20 @@
                             <Setter TargetName="TitleText" Property="Visibility" Value="Collapsed" />
                         </Trigger>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="Border" Property="Background" Value="{DynamicResource MahApps.Brushes.Accent2}"/>
-                            <Setter TargetName="Border" Property="BorderBrush" Value="White" />
-                            <Setter TargetName="Border" Property="BorderThickness" Value="1" />
+                            <Trigger.EnterActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetName="HoverOverlay" Storyboard.TargetProperty="Opacity" To="1" Duration="0:0:0.2" />
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </Trigger.EnterActions>
+                            <Trigger.ExitActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetName="HoverOverlay" Storyboard.TargetProperty="Opacity" To="0" Duration="0:0:0.2" />
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </Trigger.ExitActions>
                         </Trigger>
                         <Trigger Property="IsEnabled" Value="False">
                             <Setter Property="Opacity" Value="0.4"/>
@@ -214,14 +241,30 @@
                             BorderThickness="{TemplateBinding BorderThickness}" 
                             CornerRadius="8"
                             SnapsToDevicePixels="True">
-                        <ContentPresenter HorizontalAlignment="Left" 
-                                          VerticalAlignment="Center" 
-                                          Margin="0"
-                                          SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                        <Grid>
+                            <Border x:Name="HoverOverlay" Background="{DynamicResource MahApps.Brushes.Accent4}" Opacity="0" CornerRadius="8" />
+                            <ContentPresenter HorizontalAlignment="Left" 
+                                              VerticalAlignment="Center" 
+                                              Margin="0"
+                                              SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                        </Grid>
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="Border" Property="Background" Value="{DynamicResource MahApps.Brushes.Accent4}" />
+                            <Trigger.EnterActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetName="HoverOverlay" Storyboard.TargetProperty="Opacity" To="1" Duration="0:0:0.15" />
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </Trigger.EnterActions>
+                            <Trigger.ExitActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetName="HoverOverlay" Storyboard.TargetProperty="Opacity" To="0" Duration="0:0:0.15" />
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </Trigger.ExitActions>
                             <Setter Property="Foreground" Value="{DynamicResource MahApps.Brushes.ThemeForeground}" />
                         </Trigger>
                         <Trigger Property="IsPressed" Value="True">
@@ -253,13 +296,29 @@
                             BorderThickness="{TemplateBinding BorderThickness}" 
                             CornerRadius="18"
                             SnapsToDevicePixels="True">
-                        <ContentPresenter HorizontalAlignment="Center" 
-                                          VerticalAlignment="Center" 
-                                          SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                        <Grid>
+                            <Border x:Name="HoverOverlay" Background="#1AEF4444" Opacity="0" CornerRadius="18" />
+                            <ContentPresenter HorizontalAlignment="Center" 
+                                              VerticalAlignment="Center" 
+                                              SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                        </Grid>
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="Border" Property="Background" Value="#1AEF4444" />
+                            <Trigger.EnterActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetName="HoverOverlay" Storyboard.TargetProperty="Opacity" To="1" Duration="0:0:0.15" />
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </Trigger.EnterActions>
+                            <Trigger.ExitActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetName="HoverOverlay" Storyboard.TargetProperty="Opacity" To="0" Duration="0:0:0.15" />
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </Trigger.ExitActions>
                             <Setter Property="Foreground" Value="Crimson" />
                         </Trigger>
                         <Trigger Property="IsPressed" Value="True">
@@ -288,13 +347,29 @@
                             BorderThickness="{TemplateBinding BorderThickness}" 
                             CornerRadius="18"
                             SnapsToDevicePixels="True">
-                        <ContentPresenter HorizontalAlignment="Center" 
-                                          VerticalAlignment="Center" 
-                                          SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                        <Grid>
+                            <Border x:Name="HoverOverlay" Background="{DynamicResource MahApps.Brushes.Accent4}" Opacity="0" CornerRadius="18" />
+                            <ContentPresenter HorizontalAlignment="Center" 
+                                              VerticalAlignment="Center" 
+                                              SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                        </Grid>
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="Border" Property="Background" Value="{DynamicResource MahApps.Brushes.Accent4}" />
+                            <Trigger.EnterActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetName="HoverOverlay" Storyboard.TargetProperty="Opacity" To="1" Duration="0:0:0.15" />
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </Trigger.EnterActions>
+                            <Trigger.ExitActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetName="HoverOverlay" Storyboard.TargetProperty="Opacity" To="0" Duration="0:0:0.15" />
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </Trigger.ExitActions>
                             <Setter Property="Foreground" Value="{DynamicResource MahApps.Brushes.Accent}" />
                         </Trigger>
                         <Trigger Property="IsPressed" Value="True">
@@ -308,18 +383,18 @@
 
     <!-- Global styling helper overrides to propagate modern values (corners, padding) -->
     <Style TargetType="{x:Type Button}" BasedOn="{StaticResource {x:Type Button}}">
-        <Setter Property="Controls:ControlsHelper.CornerRadius" Value="6" />
-        <Setter Property="Padding" Value="12,6" />
+        <Setter Property="Controls:ControlsHelper.CornerRadius" Value="8" />
+        <Setter Property="Padding" Value="14,7" />
     </Style>
 
     <Style TargetType="{x:Type ComboBox}" BasedOn="{StaticResource {x:Type ComboBox}}">
-        <Setter Property="Controls:ControlsHelper.CornerRadius" Value="6" />
-        <Setter Property="Padding" Value="8,4" />
+        <Setter Property="Controls:ControlsHelper.CornerRadius" Value="8" />
+        <Setter Property="Padding" Value="10,5" />
     </Style>
 
     <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource {x:Type TextBox}}">
-        <Setter Property="Controls:ControlsHelper.CornerRadius" Value="6" />
-        <Setter Property="Padding" Value="8,5" />
+        <Setter Property="Controls:ControlsHelper.CornerRadius" Value="8" />
+        <Setter Property="Padding" Value="10,6" />
     </Style>
 
     <!-- Modern DataGrid Style -->
@@ -331,15 +406,31 @@
         <Setter Property="AlternatingRowBackground" Value="{DynamicResource MahApps.Brushes.Control.Background}" />
         <Setter Property="GridLinesVisibility" Value="Horizontal" />
         <Setter Property="HorizontalGridLinesBrush" Value="{DynamicResource MahApps.Brushes.Control.Border}" />
-        <Setter Property="RowHeight" Value="32" />
+        <Setter Property="RowHeight" Value="38" />
         <Setter Property="FontSize" Value="13" />
+        <Setter Property="RowHeaderWidth" Value="0" />
+    </Style>
+    
+    <Style TargetType="{x:Type DataGridRow}" BasedOn="{StaticResource {x:Type DataGridRow}}">
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="BorderThickness" Value="0,0,0,1"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource MahApps.Brushes.Control.Border}"/>
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="{DynamicResource MahApps.Brushes.Accent4}"/>
+            </Trigger>
+            <Trigger Property="IsSelected" Value="True">
+                <Setter Property="Background" Value="{DynamicResource MahApps.Brushes.Accent3}"/>
+                <Setter Property="Foreground" Value="{DynamicResource MahApps.Brushes.ThemeForeground}"/>
+            </Trigger>
+        </Style.Triggers>
     </Style>
     
     <Style TargetType="{x:Type DataGridColumnHeader}" BasedOn="{StaticResource {x:Type DataGridColumnHeader}}">
         <Setter Property="Background" Value="{DynamicResource MahApps.Brushes.Control.Background}" />
         <Setter Property="Foreground" Value="{DynamicResource MahApps.Brushes.ThemeForeground}" />
         <Setter Property="FontWeight" Value="SemiBold" />
-        <Setter Property="Padding" Value="8,6" />
+        <Setter Property="Padding" Value="10,8" />
         <Setter Property="BorderThickness" Value="0,0,0,1" />
         <Setter Property="BorderBrush" Value="{DynamicResource MahApps.Brushes.Control.Border}" />
     </Style>
@@ -349,17 +440,22 @@
         <Setter Property="Background" Value="{DynamicResource MahApps.Brushes.Control.Background}" />
         <Setter Property="BorderBrush" Value="{DynamicResource MahApps.Brushes.Control.Border}" />
         <Setter Property="BorderThickness" Value="1" />
-        <Setter Property="CornerRadius" Value="10" />
-        <Setter Property="Padding" Value="20,16" />
-        <Setter Property="Margin" Value="0,0,0,12" />
+        <Setter Property="CornerRadius" Value="12" />
+        <Setter Property="Padding" Value="24,20" />
+        <Setter Property="Margin" Value="0,0,0,16" />
+        <Setter Property="Effect">
+            <Setter.Value>
+                <DropShadowEffect BlurRadius="12" ShadowDepth="1" Opacity="0.04" Color="Black" />
+            </Setter.Value>
+        </Setter>
     </Style>
 
     <!-- Section Title TextBlock Style -->
     <Style x:Key="SectionTitle" TargetType="TextBlock">
-        <Setter Property="FontSize" Value="18" />
+        <Setter Property="FontSize" Value="16" />
         <Setter Property="FontWeight" Value="SemiBold" />
         <Setter Property="Foreground" Value="{DynamicResource MahApps.Brushes.Accent}" />
-        <Setter Property="Margin" Value="0,0,0,12" />
+        <Setter Property="Margin" Value="0,0,0,16" />
     </Style>
 
 </ResourceDictionary>

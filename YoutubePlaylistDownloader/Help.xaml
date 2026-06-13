@@ -6,7 +6,10 @@
              xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" 
-             FlowDirection="{DynamicResource FlowDirection}">
+             FlowDirection="{DynamicResource FlowDirection}"
+             TextOptions.TextFormattingMode="Display"
+             TextOptions.TextRenderingMode="ClearType"
+             UseLayoutRounding="True">
 
     <UserControl.Triggers>
         <EventTrigger RoutedEvent="UserControl.Loaded">

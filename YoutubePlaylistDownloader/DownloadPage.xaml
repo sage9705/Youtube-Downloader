@@ -4,11 +4,14 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:Controls="http://metro.mahapps.com/winfx/xaml/controls"
              Margin="10"
-             FlowDirection="{DynamicResource FlowDirection}">
-    <StackPanel x:Name="DownloadProgressStackPanel" HorizontalAlignment="Stretch" Margin="20,0">
+             FlowDirection="{DynamicResource FlowDirection}"
+             TextOptions.TextFormattingMode="Display"
+             TextOptions.TextRenderingMode="ClearType"
+             UseLayoutRounding="True">
+    <StackPanel x:Name="DownloadProgressStackPanel" HorizontalAlignment="Stretch" Margin="20,10">
 
-        <TextBlock x:Name="HeadlineTextBlock" HorizontalAlignment="Center" Text="{DynamicResource Loading}" FontSize="24" Foreground="{DynamicResource MahApps.Brushes.Accent}" Margin="5,15,5,15" />
-        <Grid x:Name="CurrentDownloadGrid" Margin="10,8">
+        <TextBlock x:Name="HeadlineTextBlock" HorizontalAlignment="Center" Text="{DynamicResource Loading}" FontSize="24" FontWeight="SemiBold" Foreground="{DynamicResource MahApps.Brushes.Accent}" Margin="5,15,5,20" />
+        <Grid x:Name="CurrentDownloadGrid" Margin="10,10">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
@@ -16,9 +19,9 @@
             <TextBlock x:Name="CurrentDownloadProgressBarTextBlock" Grid.Row="0" Margin="2,0,2,6" 
                        HorizontalAlignment="Right" FontSize="14" FontWeight="SemiBold" 
                        Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}" />
-            <Controls:MetroProgressBar Grid.Row="1" Height="10" x:Name="CurrentDownloadProgressBar" Minimum="0" Maximum="100" />
+            <Controls:MetroProgressBar Grid.Row="1" Height="12" x:Name="CurrentDownloadProgressBar" Minimum="0" Maximum="100" />
         </Grid>
-        <Grid x:Name="TotalDownloadedGrid" Margin="10,8">
+        <Grid x:Name="TotalDownloadedGrid" Margin="10,10">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
@@ -26,25 +29,24 @@
             <TextBlock x:Name="TotalDownloadsProgressBarTextBlock" Grid.Row="0" Margin="2,0,2,6" 
                        HorizontalAlignment="Right" FontSize="14" FontWeight="SemiBold" 
                        Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}" />
-            <Controls:MetroProgressBar Grid.Row="1" Height="10" x:Name="DownloadedVideosProgressBar" Minimum="0" />
+            <Controls:MetroProgressBar Grid.Row="1" Height="12" x:Name="DownloadedVideosProgressBar" Minimum="0" />
         </Grid>
 
         <TextBlock x:Name="ConvertingTextBlock" Visibility="Collapsed"  HorizontalAlignment="Center" FontSize="16" Foreground="{DynamicResource MahApps.Brushes.Accent}" Margin="5" />
 
         <TextBlock Visibility="Collapsed" x:Name="DownloadSpeedTextBlock" HorizontalAlignment="Left" FontSize="18" Foreground="{DynamicResource MahApps.Brushes.Accent2}" Margin="10"/>
 
-
-        <WrapPanel HorizontalAlignment="Center">
-            <Controls:Tile Click="Exit_Click" HorizontalAlignment="Center" Title="{DynamicResource Back}" Margin="5" Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" MinWidth="200" Width="Auto" HorizontalTitleAlignment="Center" Controls:ControlsHelper.MouseOverBorderBrush="{DynamicResource BlackBrush}" Style="{StaticResource LargeTileStyle}">
+        <WrapPanel HorizontalAlignment="Center" Margin="0,20,0,10">
+            <Controls:Tile Click="Exit_Click" HorizontalAlignment="Center" Title="{DynamicResource Back}" Margin="6" Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" MinWidth="200" Width="Auto" HorizontalTitleAlignment="Center" Controls:ControlsHelper.MouseOverBorderBrush="{DynamicResource BlackBrush}" Style="{StaticResource LargeTileStyle}">
                 <iconPacks:PackIconModern Width="40" Height="40" Kind="ArrowLeft" />
             </Controls:Tile>
-            <Controls:Tile Click="PauseResume_Click" x:Name="PauseResumeTile" HorizontalAlignment="Center" Title="{DynamicResource Pause}" Margin="5" MinWidth="200" Width="Auto" HorizontalTitleAlignment="Center" Controls:ControlsHelper.MouseOverBorderBrush="{DynamicResource BlackBrush}" Style="{StaticResource LargeTileStyle}">
+            <Controls:Tile Click="PauseResume_Click" x:Name="PauseResumeTile" HorizontalAlignment="Center" Title="{DynamicResource Pause}" Margin="6" MinWidth="200" Width="Auto" HorizontalTitleAlignment="Center" Controls:ControlsHelper.MouseOverBorderBrush="{DynamicResource BlackBrush}" Style="{StaticResource LargeTileStyle}">
                 <iconPacks:PackIconModern Width="40" Height="40" x:Name="PauseResumeIcon" Kind="ControlPause" />
             </Controls:Tile>
-            <Controls:Tile Click="Background_Exit" HorizontalAlignment="Center" Title="{DynamicResource DownloadInBackground}" Margin="5" Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" MinWidth="200" Width="Auto" HorizontalTitleAlignment="Center" Controls:ControlsHelper.MouseOverBorderBrush="{DynamicResource BlackBrush}" Style="{StaticResource LargeTileStyle}">
+            <Controls:Tile Click="Background_Exit" HorizontalAlignment="Center" Title="{DynamicResource DownloadInBackground}" Margin="6" Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" MinWidth="200" Width="Auto" HorizontalTitleAlignment="Center" Controls:ControlsHelper.MouseOverBorderBrush="{DynamicResource BlackBrush}" Style="{StaticResource LargeTileStyle}">
                 <iconPacks:PackIconModern Width="40" Height="40" Kind="InboxIn" />
             </Controls:Tile>
-            <Controls:Tile Click="OpenFolder_Click" HorizontalAlignment="Center" Title="{DynamicResource OpenDestinationFolder}" Margin="5" Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" MinWidth="200" Width="Auto" HorizontalTitleAlignment="Center" Controls:ControlsHelper.MouseOverBorderBrush="{DynamicResource BlackBrush}" Style="{StaticResource LargeTileStyle}">
+            <Controls:Tile Click="OpenFolder_Click" HorizontalAlignment="Center" Title="{DynamicResource OpenDestinationFolder}" Margin="6" Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" MinWidth="200" Width="Auto" HorizontalTitleAlignment="Center" Controls:ControlsHelper.MouseOverBorderBrush="{DynamicResource BlackBrush}" Style="{StaticResource LargeTileStyle}">
                 <iconPacks:PackIconModern Width="40" Height="40" Kind="FolderOpen" />
             </Controls:Tile>
         </WrapPanel>

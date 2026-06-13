@@ -12,7 +12,10 @@
                       GlowBrush="White"
                       BorderThickness="0"
                       Title="{DynamicResource Title}"
-                      FlowDirection="{DynamicResource FlowDirection}">
+                      FlowDirection="{DynamicResource FlowDirection}"
+                      TextOptions.TextFormattingMode="Display"
+                      TextOptions.TextRenderingMode="ClearType"
+                      UseLayoutRounding="True">
 
     <Controls:MetroWindow.Flyouts>
         <Controls:FlyoutsControl>
@@ -45,7 +48,7 @@
                         <iconPacks:PackIconModern Width="28" Height="28" Kind="Youtube" Foreground="{DynamicResource MahApps.Brushes.Accent}" VerticalAlignment="Center" Margin="0,0,10,0"/>
                         <TextBlock Text="YPD Downloader" FontSize="18" FontWeight="Bold" Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}" VerticalAlignment="Center" />
                     </StackPanel>
-                    <Rectangle Height="1" Fill="{DynamicResource MahApps.Brushes.Control.Border}" Margin="10,0" Opacity="0.5"/>
+                    <Rectangle Height="1" Fill="{DynamicResource MahApps.Brushes.Control.Border}" Margin="15,4,15,12" Opacity="0.4"/>
                 </StackPanel>
 
                 <StackPanel Grid.Row="1" VerticalAlignment="Top">

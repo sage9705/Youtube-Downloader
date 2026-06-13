@@ -6,7 +6,10 @@
              xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              FlowDirection="{DynamicResource FlowDirection}"
-             HorizontalAlignment="Center">
+             HorizontalAlignment="Center"
+             TextOptions.TextFormattingMode="Display"
+             TextOptions.TextRenderingMode="ClearType"
+             UseLayoutRounding="True">
 
     <Grid Margin="30,10">
         <ScrollViewer VerticalScrollBarVisibility="Auto">
@@ -49,11 +52,11 @@
                         <CheckBox x:Name="CaptionsCheckBox" Margin="7" Content="{DynamicResource DownloadCaptions}" />
                         <WrapPanel>
                             <Label Content="{DynamicResource CaptionsLanguage}" Margin="7" VerticalAlignment="Center" />
-                            <ComboBox Height="10" x:Name="CaptionsLanguagesComboBox" Width="Auto" />
+                            <ComboBox x:Name="CaptionsLanguagesComboBox" Width="Auto" VerticalAlignment="Center" />
                         </WrapPanel>
                         <WrapPanel>
                             <Label Content="{DynamicResource VideoLanguage}" Margin="7" VerticalAlignment="Center" />
-                            <ComboBox Height="10" x:Name="VideoLanguagesComboBox" Width="Auto" />
+                            <ComboBox x:Name="VideoLanguagesComboBox" Width="Auto" VerticalAlignment="Center" />
                         </WrapPanel>
                     </StackPanel>
                 </Border>
