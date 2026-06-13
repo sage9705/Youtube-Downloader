@@ -30,6 +30,7 @@ public partial class DownloadPage : UserControl, IDisposable, IDownload
     private FixedQueue<double> downloadSpeeds;
     private readonly Dictionary<IVideo, int> indexes = [];
     private readonly List<Task> conversionTasks = [];
+    private readonly Dictionary<string, (VideoQuality Quality, string Bitrate)> perVideoOverrides = [];
 
     public bool StillDownloading;
     private readonly ManualResetEventSlim pauseGate = new(true);
@@ -137,7 +138,7 @@ public partial class DownloadPage : UserControl, IDisposable, IDownload
 
 
     public DownloadPage(FullPlaylist playlist, DownloadSettings settings, string savePath = "", IEnumerable<IVideo> videos = null,
-        bool silent = false, CancellationTokenSource cancellationToken = null)
+        bool silent = false, CancellationTokenSource cancellationToken = null, IEnumerable<SelectableVideo> selectableVideos = null)
     {
         InitializeComponent();
         downloadSettings = settings;
@@ -204,6 +205,25 @@ public partial class DownloadPage : UserControl, IDisposable, IDownload
         Bitrate = settings.SetBitrate && !string.IsNullOrWhiteSpace(settings.Bitrate) && settings.Bitrate.All(char.IsDigit)
             ? $"-b:a {settings.Bitrate}k"
             : string.Empty;
+
+        if (selectableVideos != null)
+        {
+            foreach (var sv in selectableVideos)
+            {
+                var hasQualityOverride = !string.IsNullOrWhiteSpace(sv.SelectedVideoQuality);
+                var hasBitrateOverride = !string.IsNullOrWhiteSpace(sv.SelectedAudioBitrate);
+                if (hasQualityOverride || hasBitrateOverride)
+                {
+                    var overrideQuality = hasQualityOverride
+                        ? YoutubeHelpers.FromLabel(sv.SelectedVideoQuality, 30)
+                        : Quality;
+                    var overrideBitrate = hasBitrateOverride
+                        ? $"-b:a {sv.SelectedAudioBitrate}k"
+                        : Bitrate;
+                    perVideoOverrides[sv.Video.Id] = (overrideQuality, overrideBitrate);
+                }
+            }
+        }
 
         StillDownloading = true;
 
@@ -362,8 +382,11 @@ public partial class DownloadPage : UserControl, IDisposable, IDownload
 
                     if (!AudioOnly)
                     {
+                        var effectiveQuality = perVideoOverrides.TryGetValue(video.Id, out var convertOverride)
+                            ? convertOverride.Quality
+                            : Quality;
                         var videoList = streamInfoSet.GetVideoOnlyStreams()
-                            .OrderBy(x => Math.Abs(x.VideoQuality.MaxHeight - Quality.MaxHeight))
+                            .OrderBy(x => Math.Abs(x.VideoQuality.MaxHeight - effectiveQuality.MaxHeight))
                             .ThenByDescending(x => x.VideoQuality.MaxHeight);
 
                         var orderedVideoList = PreferHighestFPS
@@ -505,13 +528,16 @@ public partial class DownloadPage : UserControl, IDisposable, IDownload
 
                     if (!AudioOnly)
                     {
+                        var effectiveBitrate = perVideoOverrides.TryGetValue(video.Id, out var convertBitrateOverride)
+                            ? convertBitrateOverride.Bitrate
+                            : Bitrate;
                         var ffmpeg = new Process()
                         {
                             EnableRaisingEvents = true,
                             StartInfo = new ProcessStartInfo()
                             {
                                 FileName = GlobalConsts.FFmpegFilePath,
-                                Arguments = $"-i \"{fileLoc}\" -i \"{audioLoc}\" -y -c copy {Bitrate} \"{outputFileLoc}\"",
+                                Arguments = $"-i \"{fileLoc}\" -i \"{audioLoc}\" -y -c copy {effectiveBitrate} \"{outputFileLoc}\"",
                                 CreateNoWindow = true,
                                 UseShellExecute = false
                             }
@@ -734,8 +760,11 @@ public partial class DownloadPage : UserControl, IDisposable, IDownload
                 IVideoStreamInfo bestQuality = null;
                 IStreamInfo bestAudio = null;
 
+                var effectiveQuality = perVideoOverrides.TryGetValue(video.Id, out var dlOverride)
+                    ? dlOverride.Quality
+                    : Quality;
                 var videoList = streamInfoSet.GetVideoOnlyStreams()
-                    .OrderBy(x => Math.Abs(x.VideoQuality.MaxHeight - Quality.MaxHeight))
+                    .OrderBy(x => Math.Abs(x.VideoQuality.MaxHeight - effectiveQuality.MaxHeight))
                     .ThenByDescending(x => x.VideoQuality.MaxHeight);
 
                 var orderedVideoList = PreferHighestFPS
