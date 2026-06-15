@@ -212,6 +212,76 @@
                 </Grid>
             </Controls:MetroTabItem>
 
+            <Controls:MetroTabItem Header="Site Downloader">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    
+                    <Grid Grid.Row="0" x:Name="SiteHeadlineStackPanel" HorizontalAlignment="Stretch" Margin="5,5,5,15" >
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <Controls:Tile Grid.Column="0" x:Name="SiteScanButton" Click="SiteScanButton_Click" Style="{StaticResource RoundAccentIconButton}" Margin="0,0,12,0" ToolTip="Scan URL" VerticalAlignment="Center" IsEnabled="False">
+                            <iconPacks:PackIconModern Kind="Magnify" Width="20" Height="20" />
+                        </Controls:Tile>
+                        <TextBox Grid.Column="1" HorizontalAlignment="Stretch" x:Name="SiteUrlTextBox" Margin="0,5" FontSize="18" TextChanged="SiteUrlTextBox_TextChanged" Style="{StaticResource SeachBarPlaceHolder}" Tag="Insert Website URL here" />
+                    </Grid>
+
+                    <Grid Grid.Row="1" Margin="5,0,5,10">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0" Text="Filter:" VerticalAlignment="Center" Margin="0,0,10,0" FontSize="16" Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}" />
+                        <ComboBox Grid.Column="1" x:Name="SiteFilterComboBox" Width="150" SelectionChanged="SiteFilterComboBox_SelectionChanged" SelectedIndex="0">
+                            <ComboBoxItem Content="All Files" Tag="all" />
+                            <ComboBoxItem Content="Audio" Tag="audio" />
+                            <ComboBoxItem Content="Video" Tag="video" />
+                            <ComboBoxItem Content="Documents" Tag="doc" />
+                            <ComboBoxItem Content="Archives" Tag="archive" />
+                        </ComboBox>
+                        <TextBlock Grid.Column="2" x:Name="SiteScanStatusTextBlock" Visibility="Collapsed" Margin="15,0,0,0" VerticalAlignment="Center" FontSize="16" Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}" />
+                    </Grid>
+
+                    <DataGrid Grid.Row="2" x:Name="SiteFilesDataGrid" Visibility="Collapsed"
+                              AutoGenerateColumns="False" IsReadOnly="False"
+                              CanUserAddRows="False" CanUserDeleteRows="False"
+                              SelectionMode="Single" SelectionUnit="FullRow"
+                              HeadersVisibility="Column" HorizontalAlignment="Stretch"
+                              Margin="7,5" GridLinesVisibility="Horizontal" BorderThickness="1">
+                        <DataGrid.Columns>
+                            <DataGridTemplateColumn Width="40">
+                                <DataGridTemplateColumn.Header>
+                                    <CheckBox x:Name="SiteSelectAllCheckBox" IsChecked="True"
+                                              Checked="SiteSelectAllCheckBox_Changed" Unchecked="SiteSelectAllCheckBox_Changed" />
+                                </DataGridTemplateColumn.Header>
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <CheckBox IsChecked="{Binding IsSelected, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                                                  HorizontalAlignment="Center" Checked="SiteFileCheckBox_Changed" Unchecked="SiteFileCheckBox_Changed" />
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTextColumn Header="File Name" Binding="{Binding FileName}" Width="*" IsReadOnly="True" />
+                            <DataGridTextColumn Header="Extension" Binding="{Binding Extension}" Width="80" IsReadOnly="True" />
+                            <DataGridTextColumn Header="Size" Binding="{Binding SizeDisplay}" Width="100" IsReadOnly="True" />
+                        </DataGrid.Columns>
+                    </DataGrid>
+
+                    <WrapPanel Grid.Row="3" HorizontalAlignment="Center" Margin="0,15,0,10">
+                        <Controls:Tile Style="{DynamicResource SmallTileStyle}" x:Name="SiteDownloadButton" Title="{DynamicResource Download}" MinWidth="200" Width="Auto" HorizontalTitleAlignment="Center" IsEnabled="False" Click="SiteDownloadButton_Click">
+                            <iconPacks:PackIconModern Width="40" Height="40" Kind="ArrowDown" />
+                        </Controls:Tile>
+                    </WrapPanel>
+                </Grid>
+            </Controls:MetroTabItem>
+
         </Controls:MetroAnimatedTabControl>
     </Grid>
 </UserControl>

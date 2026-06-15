@@ -380,4 +380,197 @@ public partial class MainPage : UserControl
             e.Handled = true;
         }
     }
+
+    private ObservableCollection<SiteDownloadFile> siteDownloadFiles = [];
+    private ICollectionView siteDownloadFilesView;
+    private bool isUpdatingSiteSelectAll = false;
+    private string currentSiteUrl = string.Empty;
+
+    private void SiteUrlTextBox_TextChanged(object sender, TextChangedEventArgs e)
+    {
+        SiteScanButton.IsEnabled = !string.IsNullOrWhiteSpace(SiteUrlTextBox.Text) && 
+            (SiteUrlTextBox.Text.StartsWith("http://", StringComparison.OrdinalIgnoreCase) || 
+             SiteUrlTextBox.Text.StartsWith("https://", StringComparison.OrdinalIgnoreCase));
+    }
+
+    private async void SiteScanButton_Click(object sender, RoutedEventArgs e)
+    {
+        currentSiteUrl = SiteUrlTextBox.Text.Trim();
+        if (string.IsNullOrWhiteSpace(currentSiteUrl)) return;
+
+        SiteScanButton.IsEnabled = false;
+        SiteScanStatusTextBlock.Visibility = Visibility.Visible;
+        SiteScanStatusTextBlock.Text = "Scanning...";
+        SiteFilesDataGrid.Visibility = Visibility.Collapsed;
+        siteDownloadFiles.Clear();
+
+        try
+        {
+            using var httpClient = new HttpClient();
+            var html = await httpClient.GetStringAsync(currentSiteUrl);
+            
+            var regex = new Regex(@"href\s*=\s*[""'](.*?\.([a-zA-Z0-9]+))[""']", RegexOptions.IgnoreCase);
+            var matches = regex.Matches(html);
+            
+            var baseUri = new Uri(currentSiteUrl);
+            var foundFiles = new List<SiteDownloadFile>();
+
+            foreach (Match match in matches)
+            {
+                var link = match.Groups[1].Value;
+                var extension = match.Groups[2].Value.ToLower();
+
+                if (new[] { "mp3", "mp4", "pdf", "zip", "rar", "wav", "ogg", "mkv", "avi", "mov", "wmv", "flac" }.Contains(extension))
+                {
+                    if (Uri.TryCreate(baseUri, link, out Uri fileUri))
+                    {
+                        var url = fileUri.ToString();
+                        if (!foundFiles.Any(f => f.Url == url))
+                        {
+                            var fileName = Path.GetFileName(fileUri.LocalPath);
+                            if (string.IsNullOrWhiteSpace(fileName)) fileName = $"file.{extension}";
+
+                            var subFolder = Path.GetDirectoryName(fileUri.LocalPath)?.TrimStart('\\', '/');
+                            if (subFolder == null) subFolder = "";
+
+                            foundFiles.Add(new SiteDownloadFile
+                            {
+                                Url = url,
+                                FileName = Uri.UnescapeDataString(fileName),
+                                Extension = extension,
+                                SubFolder = Uri.UnescapeDataString(subFolder),
+                                Size = 0
+                            });
+                        }
+                    }
+                }
+            }
+
+            _ = Task.Run(async () => 
+            {
+                var tasks = foundFiles.Select(async f =>
+                {
+                    try
+                    {
+                        using var req = new HttpRequestMessage(HttpMethod.Head, f.Url);
+                        using var res = await httpClient.SendAsync(req);
+                        if (res.IsSuccessStatusCode && res.Content.Headers.ContentLength.HasValue)
+                        {
+                            f.Size = res.Content.Headers.ContentLength.Value;
+                            await Dispatcher.InvokeAsync(() => f.IsSelected = f.IsSelected); 
+                        }
+                    }
+                    catch { }
+                });
+                await Task.WhenAll(tasks);
+            });
+
+            siteDownloadFiles = new ObservableCollection<SiteDownloadFile>(foundFiles);
+            siteDownloadFilesView = CollectionViewSource.GetDefaultView(siteDownloadFiles);
+            siteDownloadFilesView.Filter = SiteFileFilter;
+            SiteFilesDataGrid.ItemsSource = siteDownloadFilesView;
+            
+            if (siteDownloadFilesView.Cast<object>().Any())
+            {
+                SiteScanStatusTextBlock.Text = $"Found {siteDownloadFiles.Count} files.";
+                SiteFilesDataGrid.Visibility = Visibility.Visible;
+                SiteDownloadButton.IsEnabled = true;
+                SiteSelectAllCheckBox.IsChecked = true;
+            }
+            else
+            {
+                SiteScanStatusTextBlock.Text = "No downloadable files found.";
+                SiteDownloadButton.IsEnabled = false;
+            }
+        }
+        catch (Exception ex)
+        {
+            SiteScanStatusTextBlock.Text = $"Error: {ex.Message}";
+            SiteDownloadButton.IsEnabled = false;
+        }
+        finally
+        {
+            SiteScanButton.IsEnabled = true;
+        }
+    }
+
+    private void SiteFilterComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+        if (siteDownloadFilesView != null)
+        {
+            siteDownloadFilesView.Refresh();
+            UpdateSiteSelectionCount();
+        }
+    }
+
+    private bool SiteFileFilter(object item)
+    {
+        if (item is SiteDownloadFile file)
+        {
+            if (SiteFilterComboBox?.SelectedItem is ComboBoxItem selectedItem)
+            {
+                var tag = selectedItem.Tag?.ToString();
+                switch (tag)
+                {
+                    case "audio": return new[] { "mp3", "wav", "ogg", "flac", "aac", "m4a" }.Contains(file.Extension.ToLower());
+                    case "video": return new[] { "mp4", "mkv", "avi", "mov", "wmv", "webm" }.Contains(file.Extension.ToLower());
+                    case "doc": return new[] { "pdf", "doc", "docx", "txt" }.Contains(file.Extension.ToLower());
+                    case "archive": return new[] { "zip", "rar", "7z", "tar", "gz" }.Contains(file.Extension.ToLower());
+                    case "all":
+                    default: return true;
+                }
+            }
+        }
+        return true;
+    }
+
+    private void SiteSelectAllCheckBox_Changed(object sender, RoutedEventArgs e)
+    {
+        if (isUpdatingSiteSelectAll || siteDownloadFilesView == null || siteDownloadFilesView.IsEmpty) return;
+
+        var isChecked = SiteSelectAllCheckBox.IsChecked == true;
+        foreach (SiteDownloadFile file in siteDownloadFilesView)
+            file.IsSelected = isChecked;
+
+        UpdateSiteSelectionCount();
+    }
+
+    private void SiteFileCheckBox_Changed(object sender, RoutedEventArgs e)
+    {
+        if (isUpdatingSiteSelectAll || siteDownloadFilesView == null) return;
+
+        isUpdatingSiteSelectAll = true;
+        var visibleFiles = siteDownloadFilesView.Cast<SiteDownloadFile>().ToList();
+        var allSelected = visibleFiles.Any() && visibleFiles.All(v => v.IsSelected);
+        var noneSelected = visibleFiles.All(v => !v.IsSelected);
+        SiteSelectAllCheckBox.IsChecked = allSelected ? true : noneSelected ? false : null;
+        isUpdatingSiteSelectAll = false;
+
+        UpdateSiteSelectionCount();
+    }
+
+    private void UpdateSiteSelectionCount()
+    {
+        if (siteDownloadFilesView == null) return;
+        var selected = siteDownloadFilesView.Cast<SiteDownloadFile>().Count(v => v.IsSelected);
+        SiteDownloadButton.IsEnabled = selected > 0;
+    }
+
+    private void SiteDownloadButton_Click(object sender, RoutedEventArgs e)
+    {
+        if (siteDownloadFilesView == null) return;
+        var selectedFiles = siteDownloadFilesView.Cast<SiteDownloadFile>().Where(f => f.IsSelected).ToList();
+        if (selectedFiles.Count == 0)
+        {
+            GlobalConsts.ShowMessage((string)FindResource("Error"), "No files selected").ConfigureAwait(false);
+            return;
+        }
+
+        _ = new SiteDownloadPage(selectedFiles, currentSiteUrl);
+        siteDownloadFiles.Clear();
+        SiteFilesDataGrid.Visibility = Visibility.Collapsed;
+        SiteScanStatusTextBlock.Visibility = Visibility.Collapsed;
+        SiteUrlTextBox.Text = string.Empty;
+        MetroAnimatedTabControl.SelectedItem = QueueMetroTabItem;
+    }
 }
