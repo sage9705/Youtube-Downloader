@@ -109,9 +109,17 @@ class QueuedDownload(IDownload downloadItem) : IDisposable
         {
             Width = 200,
             Height = 112.5,
-            Margin = margin,
-            Source = new BitmapImage(new Uri(item.ImageUrl)),
+            Margin = margin
         };
+
+        if (!string.IsNullOrWhiteSpace(item.ImageUrl))
+        {
+            try
+            {
+                image.Source = new BitmapImage(new Uri(item.ImageUrl));
+            }
+            catch { }
+        }
 
         //Col 1:
         Grid.SetRow(image, 0);
