@@ -573,4 +573,189 @@ public partial class MainPage : UserControl
         SiteUrlTextBox.Text = string.Empty;
         MetroAnimatedTabControl.SelectedItem = QueueMetroTabItem;
     }
+
+    private ObservableCollection<LocalMediaFile> localMediaFiles = [];
+    private ICollectionView localMediaFilesView;
+    private bool isUpdatingLocalConverterSelectAll = false;
+
+    private void LocalConverterBrowseButton_Click(object sender, RoutedEventArgs e)
+    {
+        var openFileDialog = new Microsoft.Win32.OpenFileDialog
+        {
+            Multiselect = true,
+            Filter = "Video Files|*.mp4;*.mkv;*.avi;*.mov;*.wmv;*.flv;*.webm|All files (*.*)|*.*",
+            Title = "Select Video Files"
+        };
+
+        if (openFileDialog.ShowDialog() == true)
+        {
+            AddLocalFiles(openFileDialog.FileNames);
+        }
+    }
+
+    private void LocalConverter_Drop(object sender, DragEventArgs e)
+    {
+        if (e.Data.GetDataPresent(DataFormats.FileDrop))
+        {
+            var files = (string[])e.Data.GetData(DataFormats.FileDrop);
+            AddLocalFiles(files);
+        }
+    }
+
+    private void AddLocalFiles(string[] filePaths)
+    {
+        foreach (var path in filePaths)
+        {
+            if (File.Exists(path) && !localMediaFiles.Any(f => f.FilePath == path))
+            {
+                var fileInfo = new FileInfo(path);
+                
+                string fileNameWithoutExt = Path.GetFileNameWithoutExtension(fileInfo.Name);
+                string artist = "";
+                string title = fileNameWithoutExt;
+
+                var parts = fileNameWithoutExt.Split(new[] { " - " }, StringSplitOptions.RemoveEmptyEntries);
+                if (parts.Length == 2)
+                {
+                    artist = parts[0].Trim();
+                    title = parts[1].Trim();
+                }
+
+                localMediaFiles.Add(new LocalMediaFile
+                {
+                    FilePath = path,
+                    FileName = fileInfo.Name,
+                    Extension = fileInfo.Extension.TrimStart('.').ToLower(),
+                    SizeDisplay = $"{(fileInfo.Length / 1048576.0):0.00} MB",
+                    IsSelected = true,
+                    Artist = artist,
+                    Title = title
+                });
+            }
+        }
+
+        UpdateLocalConverterGrid();
+    }
+
+    private void UpdateLocalConverterGrid()
+    {
+        if (localMediaFilesView == null)
+        {
+            localMediaFilesView = CollectionViewSource.GetDefaultView(localMediaFiles);
+            LocalConverterDataGrid.ItemsSource = localMediaFilesView;
+        }
+
+        if (localMediaFiles.Any())
+        {
+            LocalConverterDataGrid.Visibility = Visibility.Visible;
+            LocalConverterSelectAllCheckBox.IsChecked = true;
+        }
+        else
+        {
+            LocalConverterDataGrid.Visibility = Visibility.Collapsed;
+        }
+        
+        UpdateLocalConverterSelectionCount();
+    }
+
+    private void LocalConverterSelectAllCheckBox_Changed(object sender, RoutedEventArgs e)
+    {
+        if (isUpdatingLocalConverterSelectAll || localMediaFilesView == null || localMediaFilesView.IsEmpty) return;
+
+        var isChecked = LocalConverterSelectAllCheckBox.IsChecked == true;
+        foreach (LocalMediaFile file in localMediaFilesView)
+            file.IsSelected = isChecked;
+
+        UpdateLocalConverterSelectionCount();
+    }
+
+    private void LocalConverterFileCheckBox_Changed(object sender, RoutedEventArgs e)
+    {
+        if (isUpdatingLocalConverterSelectAll || localMediaFilesView == null) return;
+
+        isUpdatingLocalConverterSelectAll = true;
+        var visibleFiles = localMediaFilesView.Cast<LocalMediaFile>().ToList();
+        var allSelected = visibleFiles.Any() && visibleFiles.All(v => v.IsSelected);
+        var noneSelected = visibleFiles.All(v => !v.IsSelected);
+        LocalConverterSelectAllCheckBox.IsChecked = allSelected ? true : noneSelected ? false : null;
+        isUpdatingLocalConverterSelectAll = false;
+
+        UpdateLocalConverterSelectionCount();
+    }
+
+    private void UpdateLocalConverterSelectionCount()
+    {
+        if (localMediaFilesView == null) return;
+        var selected = localMediaFilesView.Cast<LocalMediaFile>().Count(v => v.IsSelected);
+        LocalConverterConvertButton.IsEnabled = selected > 0;
+    }
+
+    private void LocalConverterConvertButton_Click(object sender, RoutedEventArgs e)
+    {
+        if (localMediaFilesView == null) return;
+        var selectedFiles = localMediaFilesView.Cast<LocalMediaFile>().Where(f => f.IsSelected).ToList();
+        if (selectedFiles.Count == 0) return;
+
+        var embedThumbnail = LocalEmbedThumbnailCheckBox.IsChecked == true;
+        var customImagePath = LocalThumbnailCustomRadio.IsChecked == true ? LocalCustomThumbnailTextBox.Text : null;
+
+        if (embedThumbnail && LocalThumbnailCustomRadio.IsChecked == true && (string.IsNullOrWhiteSpace(customImagePath) || !File.Exists(customImagePath)))
+        {
+            GlobalConsts.ShowMessage((string)FindResource("Error"), "Please select a valid custom thumbnail image or choose auto-extract.").ConfigureAwait(false);
+            return;
+        }
+
+        if (!File.Exists(GlobalConsts.FFmpegFilePath))
+        {
+            GlobalConsts.ShowMessage((string)FindResource("Error"), $"{string.Format((string)FindResource("FileDoesNotExist"), GlobalConsts.FFmpegFilePath)}").ConfigureAwait(false);
+            return;
+        }
+
+        var saveDir = GlobalConsts.settings?.SaveDirectory;
+        if (string.IsNullOrWhiteSpace(saveDir) || !Directory.Exists(saveDir))
+        {
+            saveDir = Path.GetDirectoryName(selectedFiles.First().FilePath);
+        }
+
+        var bitrate = GlobalConsts.DownloadSettings?.Bitrate ?? "192";
+
+        foreach (var file in selectedFiles)
+        {
+            var fileNameWithoutExt = Path.GetFileNameWithoutExtension(file.FileName);
+            var outputFilePath = Path.Combine(saveDir, $"{fileNameWithoutExt}.mp3");
+            
+            var copyFileLocCounter = 1;
+            while (File.Exists(outputFilePath))
+            {
+                outputFilePath = Path.Combine(saveDir, $"{fileNameWithoutExt}-{copyFileLocCounter}.mp3");
+                copyFileLocCounter++;
+            }
+
+            var conversion = new LocalConversion(file, outputFilePath, bitrate, embedThumbnail, customImagePath);
+            GlobalConsts.Downloads.Add(new QueuedDownload(conversion));
+        }
+
+        var filesToRemove = selectedFiles.ToList();
+        foreach (var f in filesToRemove)
+        {
+            localMediaFiles.Remove(f);
+        }
+        UpdateLocalConverterGrid();
+
+        MetroAnimatedTabControl.SelectedItem = QueueMetroTabItem;
+    }
+
+    private void LocalBrowseCustomThumbnailButton_Click(object sender, RoutedEventArgs e)
+    {
+        var openFileDialog = new Microsoft.Win32.OpenFileDialog
+        {
+            Filter = "Image Files|*.jpg;*.jpeg;*.png|All files (*.*)|*.*",
+            Title = "Select Custom Thumbnail"
+        };
+
+        if (openFileDialog.ShowDialog() == true)
+        {
+            LocalCustomThumbnailTextBox.Text = openFileDialog.FileName;
+        }
+    }
 }
