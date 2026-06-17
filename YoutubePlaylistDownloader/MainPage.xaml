@@ -282,6 +282,83 @@
                 </Grid>
             </Controls:MetroTabItem>
 
+            <Controls:MetroTabItem Header="Local Converter">
+                <Grid AllowDrop="True" Drop="LocalConverter_Drop">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <Border Grid.Row="0" BorderBrush="{DynamicResource MahApps.Brushes.ThemeForeground}" BorderThickness="2" CornerRadius="8" Margin="10,10,10,20" Padding="40" Background="Transparent" Opacity="0.6">
+                        <Grid HorizontalAlignment="Center">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <Controls:Tile Grid.Column="0" Click="LocalConverterBrowseButton_Click" Style="{StaticResource RoundAccentIconButton}" Margin="0,0,15,0" ToolTip="Browse Local Files" VerticalAlignment="Center" Width="60" Height="60">
+                                <iconPacks:PackIconModern Kind="FolderOpen" Width="28" Height="28" />
+                            </Controls:Tile>
+                            <TextBlock Grid.Column="1" Text="Select video files or drag and drop them here" VerticalAlignment="Center" FontSize="20" Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}" />
+                        </Grid>
+                    </Border>
+
+                    <DataGrid Grid.Row="1" x:Name="LocalConverterDataGrid" Visibility="Collapsed"
+                              AutoGenerateColumns="False" IsReadOnly="False"
+                              CanUserAddRows="False" CanUserDeleteRows="False"
+                              SelectionMode="Single" SelectionUnit="FullRow"
+                              HeadersVisibility="Column" HorizontalAlignment="Stretch"
+                              Margin="7,5" GridLinesVisibility="Horizontal" BorderThickness="1">
+                        <DataGrid.Columns>
+                            <DataGridTemplateColumn Width="40">
+                                <DataGridTemplateColumn.Header>
+                                    <CheckBox x:Name="LocalConverterSelectAllCheckBox" IsChecked="True"
+                                              Checked="LocalConverterSelectAllCheckBox_Changed" Unchecked="LocalConverterSelectAllCheckBox_Changed" />
+                                </DataGridTemplateColumn.Header>
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <CheckBox IsChecked="{Binding IsSelected, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                                                  HorizontalAlignment="Center" Checked="LocalConverterFileCheckBox_Changed" Unchecked="LocalConverterFileCheckBox_Changed" />
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTextColumn Header="File Name" Binding="{Binding FileName}" Width="*" IsReadOnly="True" />
+                            <DataGridTextColumn Header="Artist" Binding="{Binding Artist, UpdateSourceTrigger=PropertyChanged}" Width="150" IsReadOnly="False" />
+                            <DataGridTextColumn Header="Title" Binding="{Binding Title, UpdateSourceTrigger=PropertyChanged}" Width="200" IsReadOnly="False" />
+                            <DataGridTextColumn Header="Extension" Binding="{Binding Extension}" Width="80" IsReadOnly="True" />
+                            <DataGridTextColumn Header="Size" Binding="{Binding SizeDisplay}" Width="100" IsReadOnly="True" />
+                        </DataGrid.Columns>
+                    </DataGrid>
+
+                    <GroupBox Grid.Row="2" Header="Thumbnail Options" Margin="10,10,10,5">
+                        <StackPanel Orientation="Vertical" Margin="5">
+                            <CheckBox x:Name="LocalEmbedThumbnailCheckBox" Content="Embed Thumbnail (Album Art)" IsChecked="True" Margin="0,0,0,10"/>
+                            
+                            <StackPanel Margin="20,0,0,0" IsEnabled="{Binding IsChecked, ElementName=LocalEmbedThumbnailCheckBox}">
+                                <RadioButton x:Name="LocalThumbnailAutoExtractRadio" Content="Auto-extract from video" IsChecked="True" Margin="0,0,0,5"/>
+                                <RadioButton x:Name="LocalThumbnailCustomRadio" Content="Custom Image..." Margin="0,0,0,5"/>
+                                
+                                <Grid Margin="20,5,0,0" IsEnabled="{Binding IsChecked, ElementName=LocalThumbnailCustomRadio}">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBox x:Name="LocalCustomThumbnailTextBox" Grid.Column="0" IsReadOnly="True" Controls:TextBoxHelper.Watermark="Select an image file..."/>
+                                    <Button x:Name="LocalBrowseCustomThumbnailButton" Grid.Column="1" Content="Browse" Margin="5,0,0,0" Width="75" Click="LocalBrowseCustomThumbnailButton_Click"/>
+                                </Grid>
+                            </StackPanel>
+                        </StackPanel>
+                    </GroupBox>
+
+                    <WrapPanel Grid.Row="3" HorizontalAlignment="Center" Margin="0,15,0,10">
+                        <Controls:Tile Style="{DynamicResource SmallTileStyle}" x:Name="LocalConverterConvertButton" Title="Convert" MinWidth="200" Width="Auto" HorizontalTitleAlignment="Center" IsEnabled="False" Click="LocalConverterConvertButton_Click">
+                            <iconPacks:PackIconModern Width="40" Height="40" Kind="Music" />
+                        </Controls:Tile>
+                    </WrapPanel>
+                </Grid>
+            </Controls:MetroTabItem>
+
         </Controls:MetroAnimatedTabControl>
     </Grid>
 </UserControl>
