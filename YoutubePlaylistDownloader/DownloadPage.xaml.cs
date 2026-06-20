@@ -287,6 +287,20 @@ public partial class DownloadPage : UserControl, IDisposable, IDownload
                     fullPlaylist = new FullPlaylist(null, new[] { video }, video.Title);
                     await Download(fullPlaylist, new[] { video });
                 }
+                else if (YoutubePlaylistDownloader.Utilities.YoutubeHelpers.IsSpotifyPlaylist(link))
+                {
+                    var tracks = await YoutubePlaylistDownloader.Utilities.MusicPlatformHelpers.GetSpotifyPlaylistTracksAsync(link);
+                    videos = await YoutubePlaylistDownloader.Utilities.MusicPlatformHelpers.MatchTracksToYoutubeAsync(tracks);
+                    fullPlaylist = new FullPlaylist(null, videos, "Spotify Playlist");
+                    await Download(fullPlaylist, videos);
+                }
+                else if (YoutubePlaylistDownloader.Utilities.YoutubeHelpers.IsAppleMusicPlaylist(link))
+                {
+                    var tracks = await YoutubePlaylistDownloader.Utilities.MusicPlatformHelpers.GetAppleMusicPlaylistTracksAsync(link);
+                    videos = await YoutubePlaylistDownloader.Utilities.MusicPlatformHelpers.MatchTracksToYoutubeAsync(tracks);
+                    fullPlaylist = new FullPlaylist(null, videos, "Apple Music Playlist");
+                    await Download(fullPlaylist, videos);
+                }
                 else
                 {
                     throw new Exception(Application.Current.FindResource("NoVideosToDownload").ToString());

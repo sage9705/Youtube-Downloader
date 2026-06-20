@@ -108,6 +108,46 @@ public partial class MainPage : UserControl
                     await HideVideoGrid();
                 }).ConfigureAwait(false);
             }
+            else if (YoutubePlaylistDownloader.Utilities.YoutubeHelpers.IsSpotifyPlaylist(PlaylistLinkTextBox.Text))
+            {
+                var playlistUrl = PlaylistLinkTextBox.Text;
+                _ = Task.Run(async () =>
+                {
+                    await UpdatePlaylistInfo(Visibility.Visible, "Scraping Spotify Playlist...", "", "", "", "", false, false);
+                    var tracks = await YoutubePlaylistDownloader.Utilities.MusicPlatformHelpers.GetSpotifyPlaylistTracksAsync(playlistUrl);
+                    
+                    await UpdatePlaylistInfo(Visibility.Visible, "Matching Spotify Tracks on YouTube...", "", "", tracks.Count.ToString(), "", false, false);
+                    var videos = await YoutubePlaylistDownloader.Utilities.MusicPlatformHelpers.MatchTracksToYoutubeAsync(tracks, (current, total, trackName) => 
+                    {
+                        _ = UpdatePlaylistInfo(Visibility.Visible, $"Matching ({current}/{total}): {trackName}", "", "", tracks.Count.ToString(), "", false, false);
+                    });
+                    
+                    VideoList = videos;
+                    list = new FullPlaylist(null, null, "Spotify Playlist");
+                    await UpdatePlaylistInfo(Visibility.Visible, "Spotify Playlist", "", "", VideoList.Count().ToString(), "", true, true);
+                    await PopulateVideoGrid(VideoList);
+                }).ConfigureAwait(false);
+            }
+            else if (YoutubePlaylistDownloader.Utilities.YoutubeHelpers.IsAppleMusicPlaylist(PlaylistLinkTextBox.Text))
+            {
+                var playlistUrl = PlaylistLinkTextBox.Text;
+                _ = Task.Run(async () =>
+                {
+                    await UpdatePlaylistInfo(Visibility.Visible, "Scraping Apple Music Playlist...", "", "", "", "", false, false);
+                    var tracks = await YoutubePlaylistDownloader.Utilities.MusicPlatformHelpers.GetAppleMusicPlaylistTracksAsync(playlistUrl);
+                    
+                    await UpdatePlaylistInfo(Visibility.Visible, "Matching Apple Music Tracks on YouTube...", "", "", tracks.Count.ToString(), "", false, false);
+                    var videos = await YoutubePlaylistDownloader.Utilities.MusicPlatformHelpers.MatchTracksToYoutubeAsync(tracks, (current, total, trackName) => 
+                    {
+                        _ = UpdatePlaylistInfo(Visibility.Visible, $"Matching ({current}/{total}): {trackName}", "", "", tracks.Count.ToString(), "", false, false);
+                    });
+                    
+                    VideoList = videos;
+                    list = new FullPlaylist(null, null, "Apple Music Playlist");
+                    await UpdatePlaylistInfo(Visibility.Visible, "Apple Music Playlist", "", "", VideoList.Count().ToString(), "", true, true);
+                    await PopulateVideoGrid(VideoList);
+                }).ConfigureAwait(false);
+            }
             else
             {
                 await UpdatePlaylistInfo().ConfigureAwait(false);

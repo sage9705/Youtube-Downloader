@@ -7,7 +7,6 @@ public class LocalConversion : IDownload
     private readonly string outputFilePath;
     private readonly string bitrate;
     private Process ffmpegProcess;
-    private bool isPaused;
     private bool disposedValue;
 
     private string title;
@@ -57,10 +56,10 @@ public class LocalConversion : IDownload
         set { currentStatus = value; PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CurrentStatus))); }
     }
 
-    private bool embedThumbnail;
-    private string customThumbnailPath;
+    private readonly bool embedThumbnail;
+    private readonly string customThumbnailPath;
 
-    public bool IsPaused => isPaused;
+    public bool IsPaused => false;
 
     public event PropertyChangedEventHandler PropertyChanged;
 

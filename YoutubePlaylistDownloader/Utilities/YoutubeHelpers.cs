@@ -1,4 +1,4 @@
-﻿namespace YoutubePlaylistDownloader.Utilities;
+namespace YoutubePlaylistDownloader.Utilities;
 
 public static partial class YoutubeHelpers
 {
@@ -15,6 +15,18 @@ public static partial class YoutubeHelpers
             return false;
 
         return !VideoRegex().IsMatch(videoId);
+    }
+
+    public static bool IsSpotifyPlaylist(string url)
+    {
+        if (string.IsNullOrWhiteSpace(url)) return false;
+        return SpotifyPlaylistRegex().IsMatch(url);
+    }
+
+    public static bool IsAppleMusicPlaylist(string url)
+    {
+        if (string.IsNullOrWhiteSpace(url)) return false;
+        return AppleMusicPlaylistRegex().IsMatch(url);
     }
 
     /// <summary>
@@ -287,4 +299,10 @@ public static partial class YoutubeHelpers
 
     [GeneratedRegex(@"[^0-9a-zA-Z_]")]
     private static partial Regex UserNameRegex();
+
+    [GeneratedRegex(@"^https?://(?:open\.)?spotify\.com/playlist/[a-zA-Z0-9]+(?:[?#].*)?$", RegexOptions.IgnoreCase)]
+    private static partial Regex SpotifyPlaylistRegex();
+
+    [GeneratedRegex(@"^https?://music\.apple\.com/[a-zA-Z]{2}/playlist/[a-zA-Z0-9\-%]+?/pl\.[a-zA-Z0-9\-%]+(?:[?#].*)?$", RegexOptions.IgnoreCase)]
+    private static partial Regex AppleMusicPlaylistRegex();
 }
