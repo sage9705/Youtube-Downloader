@@ -107,7 +107,7 @@ public class LocalConversion : IDownload
             {
                 if (!string.IsNullOrWhiteSpace(customThumbnailPath) && File.Exists(customThumbnailPath))
                 {
-                    arguments = $"-i \"{sourceFile.FilePath}\" -i \"{customThumbnailPath}\" -map 0:a -map 1:0 -c:a libmp3lame -b:a {bitrate}k -c:v copy -metadata:s:v title=\"Album cover\" -metadata:s:v comment=\"Cover (front)\" {metadataArgs} -y \"{outputFilePath}\"";
+                    arguments = $"-i \"{sourceFile.FilePath}\" -i \"{customThumbnailPath}\" -map 0:a -map 1:0 -c:a libmp3lame -b:a {bitrate}k -c:v mjpeg -vf \"scale='min(500,iw)':-1\" -pix_fmt yuvj420p -disposition:v attached_pic -metadata:s:v title=\"Album cover\" -metadata:s:v comment=\"Cover (front)\" {metadataArgs} -y \"{outputFilePath}\"";
                 }
                 else
                 {
@@ -127,7 +127,7 @@ public class LocalConversion : IDownload
 
                     if (File.Exists(tempThumbnailPath))
                     {
-                        arguments = $"-i \"{sourceFile.FilePath}\" -i \"{tempThumbnailPath}\" -map 0:a -map 1:0 -c:a libmp3lame -b:a {bitrate}k -c:v copy -metadata:s:v title=\"Album cover\" -metadata:s:v comment=\"Cover (front)\" {metadataArgs} -y \"{outputFilePath}\"";
+                        arguments = $"-i \"{sourceFile.FilePath}\" -i \"{tempThumbnailPath}\" -map 0:a -map 1:0 -c:a libmp3lame -b:a {bitrate}k -c:v mjpeg -vf \"scale='min(500,iw)':-1\" -pix_fmt yuvj420p -disposition:v attached_pic -metadata:s:v title=\"Album cover\" -metadata:s:v comment=\"Cover (front)\" {metadataArgs} -y \"{outputFilePath}\"";
                     }
                     else
                     {
