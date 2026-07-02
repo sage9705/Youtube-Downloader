@@ -59,7 +59,7 @@ static class GlobalConsts
             return settings;
         };
         Downloads = [];
-        CurrentDir = new FileInfo(Assembly.GetEntryAssembly().Location).Directory.ToString();
+        CurrentDir = AppContext.BaseDirectory.TrimEnd(Path.DirectorySeparatorChar);
         FFmpegFilePath = FindFFmpegPath();
         var appDataPath = string.Concat(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "\\Youtube Playlist Downloader\\");
         ConfigFilePath = string.Concat(appDataPath, "Settings.json");
