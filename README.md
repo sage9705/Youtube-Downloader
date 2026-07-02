@@ -2,6 +2,8 @@
 
 # Stand with Israel!
 
+## Note: If you get a blue "Windows protected your PC" screen when running the app, click **"More info"** and then **"Run anyway"**. This happens because the app is relatively new and hasn't built up a "reputation" with Microsoft yet.
+
 ## If the files don't show up after you download a playlist, try running the program as administrator or change the save directory to a different drive! (C drive is usually protected by windows, save it under D or any other drive)
 
 ## What is it?
