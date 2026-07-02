@@ -17,6 +17,21 @@ A simple program to download whole playlists\channels or even single videos from
 - Comfortable update system
 - Multi-language support: English, Arabic, Chinese, Dutch (NL), French, German, Hebrew, Italian, Polish, Portuguese (BR), Romanian, Russian, Spanish, and Turkish
 
+### New Features by sage9705
+- **Spotify & Apple Music Support**: Match and convert playlists from Spotify and Apple Music to YouTube
+- **Local File Converter**: Integrated local converter with ffmpeg support and UI
+- **Site Downloader**: Concurrent HTML scraping and downloading with category filtering
+- **Browser Extension Integration**: Premium UI integration with the browser extension
+- **Thumbnail Downloader**: Dedicated feature to download thumbnails
+- **Mini-Player**: Added a mini-player mode
+- **Selective Downloads**: Video selection table with checkboxes for downloading specific videos from a playlist
+- **Per-Video Overrides**: Select custom quality and bitrate per video via DataGrid ComboBox columns
+- **Playlist Management**: Added playlist index numbering and playlist info saving features
+- **Pause/Continue Downloads**: Support for pausing and continuing active downloads
+- **Thumbnail Embedding**: Optional setting to embed YouTube thumbnails as cover art
+- **Improved Dialogs**: Standardized confirmation dialogs and dynamic modal icons
+- **UI Enhancements**: Significant improvements to application styling, text rendering, and layouts
+
 ## Screenshots
 ![Gif](https://i.imgur.com/bQw4fVm.gif "Gif")
 
