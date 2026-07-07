@@ -92,6 +92,8 @@ public class DownloadSettings
     [DefaultValue(false)]
     public bool NumberVideosByPlaylistIndex { get; set; }
 
+    public DownloadSettings() { }
+
     public DownloadSettings(string saveFormat, bool audioOnly, VideoQuality quality, bool preferHighestFPS,
     bool preferQuality, bool convert, bool setBitrate, string bitrate, bool downloadCaptions, string captionsLanguage,
     bool downloadThumbnail, bool savePlaylistsInDifferentDirectories, bool subset, int subsetStartIndex, int subsetEndIndex, bool openDestinationFolderWhenDone,
